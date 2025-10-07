@@ -1,0 +1,64 @@
+# WordPress Core Files
+/index.php
+/license.txt
+/readme.html
+/wp-*.php
+/xmlrpc.php
+/wp-admin/
+/wp-includes/
+
+# Configuration Files
+/wp-config.php
+/.htaccess
+
+# User Uploads & Cache
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/cache/
+/wp-content/backup*/
+/wp-content/ai1wm-backups/
+
+# Logs
+*.log
+/wp-content/debug.log
+
+# Database
+*.sql
+*.sql.gz
+
+# Backup files
+*.bak
+*_back_*
+*-backup-*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary Files
+*.tmp
+*.swp
+*.swo
+*~
+
+# Node & Composer (if used in themes/plugins)
+node_modules/
+vendor/
+package-lock.json
+composer.lock
+
+# Brand assets (usually not needed in deployment)
+/brand-assets/
+/library/
+
+# Default WordPress themes (keep only custom theme)
+/wp-content/themes/twenty*/
+
+# Windows Zone Identifier files
+*:Zone.Identifier

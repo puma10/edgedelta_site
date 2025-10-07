@@ -1,0 +1,59 @@
+/**
+ * Bulk Post Editor Styles
+ */
+
+ .bulk-post-editor-page .tablenav {
+    margin: 15px 0;
+}
+
+.bulk-post-editor-page table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bulk-post-editor-page th,
+.bulk-post-editor-page td {
+    padding: 10px;
+    vertical-align: top;
+}
+
+.bulk-post-editor-page textarea {
+    width: 100%;
+    min-height: 80px;
+}
+
+.bulk-post-editor-page select {
+    width: 100%;
+    max-width: 200px;
+}
+
+.bulk-post-editor-page input[type="text"].datepicker {
+    width: 120px;
+}
+
+.ui-datepicker {
+    z-index: 1000 !important;
+}
+
+/* Responsive layout */
+@media screen and (max-width: 782px) {
+    .bulk-post-editor-page .tablenav {
+        height: auto;
+    }
+    
+    .bulk-post-editor-page select {
+        max-width: 100%;
+    }
+    
+    .bulk-post-editor-page .tablenav-pages {
+        margin: 15px 0;
+        text-align: center;
+        float: none;
+    }
+    
+    .bulk-post-editor-page .alignleft.actions {
+        float: none;
+        display: block;
+        margin-bottom: 10px;
+    }
+}

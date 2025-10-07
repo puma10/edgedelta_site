@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edge Delta – AI Teammates</title>
+  <meta name="description" content="AI Teammates that help teams ship more and stress less. Detect, correlate, and escalate without waiting for a JIRA ticket." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #0f1520;
+      --muted: #a7b0c0;
+      --text: #e8eef7;
+      --accent: #4ade80; /* green */
+      --accent-2: #ec4899; /* pink */
+      --ring: rgba(74, 222, 128, .45);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(74,222,128,.12), transparent 50%),
+        radial-gradient(900px 500px at 90% 0%, rgba(236,72,153,.12), transparent 40%),
+        linear-gradient(180deg, #0a0d13 0%, #0b0f14 100%);
+    }
+
+    /* Layout */
+    .container { width: min(1120px, 92%); margin-inline: auto; }
+    header { position: sticky; top: 0; backdrop-filter: blur(8px); background: rgba(11,15,20,.6); border-bottom: 1px solid rgba(255,255,255,.06); z-index: 50; }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .brand { display:flex; align-items:center; gap:.6rem; font-weight: 700; letter-spacing:.2px; }
+    .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 24px rgba(74,222,128,.8); }
+    .nav a { color: var(--muted); text-decoration: none; font-weight: 500; margin-left: 20px; }
+    .nav a:hover { color: var(--text); }
+
+    /* Switcher */
+    .mode-switch { display:flex; align-items:center; gap:10px; color: var(--muted); }
+    .seg { display:none; }
+    .select { display:inline-flex; align-items:center; gap:8px; }
+    select#effectSelect { appearance:none; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); color: var(--text); padding: 8px 32px 8px 12px; border-radius: 10px; font-weight: 600; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23a7b0c0' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+    select#effectSelect:hover { background-color: rgba(255,255,255,.08); }
+
+    /* Hero */
+    .hero { display:grid; grid-template-columns: 1.25fr 1fr; gap: 48px; align-items:center; padding: 96px 0 64px; }
+    @media (max-width: 960px){ .hero { grid-template-columns: 1fr; padding: 64px 0 48px; } }
+
+    .eyebrow { display:inline-flex; align-items:center; gap:10px; font-size: .9rem; color: var(--muted); padding: 6px 10px; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; background: rgba(255,255,255,.02); }
+
+    .headline { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; font-weight: 800; margin: 24px 0 0; letter-spacing:-.02em; }
+    .headline .gradient { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip:text; background-clip:text; color: transparent; }
+    .subtitle { font-size: clamp(2rem, 5vw, 3.75rem); line-height: 1.2; font-weight: 700; margin: 8px 0 20px; letter-spacing:-.01em; }
+
+    .sub { color: var(--muted); font-size: 1.075rem; line-height: 1.6; margin: 0 0 28px; }
+
+    .ctas { display:flex; gap:12px; flex-wrap: wrap; }
+    .btn { appearance: none; border: none; cursor: pointer; font-weight: 700; padding: 14px 18px; border-radius: 12px; transition: transform .06s ease, box-shadow .2s ease, background .2s ease; }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { color: white; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 10px 30px -10px var(--ring); }
+    .btn.secondary { color: var(--text); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); }
+    .btn.secondary:hover { background: rgba(255,255,255,.1); }
+
+    .hero-card { position: relative; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); padding: 20px; box-shadow: 0 10px 40px -20px rgba(0,0,0,.7); }
+    .hero-card .screen { aspect-ratio: 16/10; border-radius: 14px; background: var(--card); border: 1px solid rgba(255,255,255,.08); overflow: hidden; position: relative; }
+    .window-bar { display:flex; align-items:center; gap:8px; padding: 10px; border-bottom: 1px solid rgba(255,255,255,.06); background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); }
+    .win-dot { width:10px; height:10px; border-radius:50%; background: #3b4158; }
+
+    /* Fake app preview */
+    .preview { display:grid; grid-template-columns: 260px 1fr; height: 100%; }
+    @media (max-width: 520px){ .preview { grid-template-columns: 1fr; } }
+    .sidebar { border-right: 1px solid rgba(255,255,255,.06); padding: 14px; }
+    .sidebar h4 { margin: 8px 0 10px; font-size: .85rem; color: var(--muted); font-weight: 600; }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding: 8px 10px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); margin: 0 6px 8px 0; font-size: .85rem; }
+    .content { padding: 16px; }
+    .card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+
+    /* Logos row */
+    .logos { display:grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 24px; align-items:center; opacity:.8; padding: 22px 0; }
+    .logos svg { width: 100%; height: 28px; }
+    @media (max-width: 960px){ .logos { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+
+    /* Feature bullets */
+    .bullets { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; padding: 36px 0 8px; }
+    .bullet { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 16px; }
+    .bullet h4 { margin: 8px 0 6px; }
+    .bullet p { margin: 0; color: var(--muted); line-height: 1.6; }
+    @media (max-width: 960px){ .bullets { grid-template-columns: 1fr; } }
+
+    /* Footer */
+    footer { border-top: 1px solid rgba(255,255,255,.08); margin-top: 60px; padding: 26px 0 60px; color: var(--muted); font-size: .95rem; }
+
+    /* Effects */
+    .rotator { display:inline-flex; align-items: baseline; }
+    .cursor { display:inline-block; width: 1ch; animation: blink 1.2s steps(1) infinite; }
+    @keyframes blink { 0%, 50% { opacity: 1 } 51%, 100% { opacity: 0 } }
+    .visually-hidden { position: absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    /* Flip rotate animation */
+    .flip-wrap { display:inline-block; perspective: 800px; }
+    .flip-word { display:inline-block; transform-origin: 50% 100%; }
+    .flip-word.enter { animation: flipIn 500ms ease both; }
+    .flip-word.leave { animation: flipOut 500ms ease both; position: absolute; }
+    @keyframes flipIn {
+      from { transform: rotateX(-90deg); opacity: 0; }
+      to   { transform: rotateX(0deg); opacity: 1; }
+    }
+    @keyframes flipOut {
+      from { transform: rotateX(0deg); opacity: 1; }
+      to   { transform: rotateX(90deg); opacity: 0; }
+    }
+
+    /* Fade animation */
+    .fade-wrap { display:inline-block; position: relative; }
+    .fade-word.enter { animation: fadeIn 380ms ease both; }
+    .fade-word.leave { animation: fadeOut 380ms ease both; position:absolute;}
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+    /* Slide (up) animation */
+    .slide-wrap { display:inline-block; position: relative; }
+    .slide-word.enter { animation: slideIn 420ms ease both; }
+    .slide-word.leave { animation: slideOut 420ms ease both; position:absolute; }
+    @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-10px); opacity: 0; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Edge Delta</span>
+      </div>
+      <nav style="display:flex; align-items:center; gap:16px;">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#docs">Docs</a>
+        <a href="#login">Log in</a>
+        <div class="mode-switch" title="Choose headline effect">
+          <div class="select">
+            <label for="effectSelect" style="font-size:.9rem;">Effect</label>
+            <select id="effectSelect" aria-label="Headline effect">
+              <option value="typing">Typing</option>
+              <option value="rotate">Rotate (flip)</option>
+              <option value="fade">Fade</option>
+              <option value="slide">Slide up</option>
+            </select>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" aria-label="Hero">
+      <div>
+        <span class="eyebrow">🤖 AI-Powered Incident Response</span>
+        <h1 class="headline">
+          <span class="gradient">AI</span> Teammates
+        </h1>
+        <h2 class="subtitle">
+          <span class="rotator" data-words='["Your experts deserve","Are multi-model","Are managed by you","Support MCP","Don&apos;t stress during outages","Are always OnCall","Detect, correlate, and escalate","Don&apos;t wait for a JIRA ticket","Make your team feel 10x bigger","Start to triage first everytime","Help teams ship more and stress less","Run 100x faster with you","Your boss is currently asking for","Detect threats and explains them","Work every timezone 24/7","Never miss a signal"]' data-type-speed="55" data-delete-speed="30" data-hold="1500" data-loop="true">
+            <!-- Typing mode -->
+            <span id="typingMode" aria-live="polite">
+              <span id="typed"></span><span class="cursor">▌</span>
+            </span>
+            <!-- Animated modes (shared container) -->
+            <span id="animWrap" class="flip-wrap" style="display:none" aria-live="polite"></span>
+          </span>
+        </h2>
+        <p class="sub">AI teammates that detect suspicious authentication patterns, alert on security incidents, and help your team respond faster. Never miss a critical signal in the noise.</p>
+        <div class="ctas">
+          <button class="btn primary">Schedule Demo</button>
+          <button class="btn secondary">Login</button>
+        </div>
+
+        <div class="logos" aria-label="Trusted by">
+          <!-- Simple placeholder logos as inline SVGs -->
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Nimbus</text></svg>
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Volt</text></svg>
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Atlas</text></svg>
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Quanta</text></svg>
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Nova</text></svg>
+          <svg viewBox="0 0 100 20" aria-hidden="true"><rect width="100" height="20" rx="3" fill="rgba(255,255,255,.08)"/><text x="50" y="14" font-size="10" text-anchor="middle" fill="#a7b0c0">Zenith</text></svg>
+        </div>
+
+        <div class="bullets" id="features">
+          <div class="bullet">
+            <h4>24/7 Monitoring</h4>
+            <p>AI teammates work across all timezones, never missing critical signals.</p>
+          </div>
+          <div class="bullet">
+            <h4>Intelligent Triage</h4>
+            <p>Automatically detect, correlate, and escalate incidents without waiting.</p>
+          </div>
+          <div class="bullet">
+            <h4>Multi-Model Support</h4>
+            <p>Leverage multiple AI models with MCP support for comprehensive coverage.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card" aria-hidden="true">
+        <div class="screen">
+          <div class="window-bar">
+            <span class="win-dot"></span><span class="win-dot"></span><span class="win-dot"></span>
+          </div>
+          <div class="preview">
+            <aside class="sidebar">
+              <h4>AI Teammates</h4>
+              <div class="pill">🔴 Security Alerts</div>
+              <div class="pill">🟠 DevOps</div>
+              <div class="pill">🔵 SRE</div>
+              <div class="pill">🟢 Monitoring</div>
+              <div class="pill">⚡ On Call AI</div>
+            </aside>
+            <section class="content">
+              <div class="card" style="border-left: 3px solid #ef4444;">🔴 SecurityBot: Detecting suspicious authentication patterns from IP 192.168.1.100</div>
+              <div class="card" style="border-left: 3px solid #f59e0b;">🟠 DevOpsAgent: Payment gateway experiencing severe timeouts</div>
+              <div class="card" style="border-left: 3px solid #3b82f6;">🔵 SREMonitor: Alert - Detecting authentication patterns from IP 192.168.1.100</div>
+              <div class="card" style="border-left: 3px solid #10b981;">🟢 DevOpsAgent: Resolved - Load balancer rotation completed</div>
+              <div class="card">📊 System Health: All services operational</div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="container">
+      <div class="card" style="padding:18px 20px; margin-top: 8px;">
+        <strong>Enterprise-ready AI.</strong> Schedule a demo to see AI teammates in action. <span style="color:var(--muted)">SOC2 compliant.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Edge Delta, Inc. • <a href="#" style="color:inherit">Privacy</a> • <a href="#" style="color:inherit">Terms</a> • <a href="#" style="color:inherit">Security</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const root = document.querySelector('.rotator');
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Debug: Check if root element exists
+      if (!root) {
+        console.error('Rotator element not found');
+        return;
+      }
+      
+      // Get the data-words attribute and handle HTML entities
+      let wordsAttr = root.getAttribute('data-words') || '[]';
+      
+      // Replace HTML entities with actual characters for JSON parsing
+      wordsAttr = wordsAttr.replace(/&apos;/g, "'");
+      
+      let words = [];
+      try {
+        words = JSON.parse(wordsAttr);
+        console.log('Loaded', words.length, 'animation phrases');
+      } catch(e) {
+        console.error('Error parsing words:', e);
+        // Fallback words
+        words = ["Your experts deserve", "Are multi-model", "Are managed by you"];
+      }
+
+      // Elements
+      const typingWrap = document.getElementById('typingMode');
+      const typed = document.getElementById('typed');
+      const animWrap = document.getElementById('animWrap');
+
+      // Controls
+      const effectSelect = document.getElementById('effectSelect');
+      
+      // Check if elements exist
+      if (!typingWrap || !typed || !animWrap || !effectSelect) {
+        console.error('Required elements not found:', {
+          typingWrap: !!typingWrap,
+          typed: !!typed,
+          animWrap: !!animWrap,
+          effectSelect: !!effectSelect
+        });
+        return;
+      }
+
+      // Speeds - get from data attributes
+      const typeSpeed = parseInt(root.getAttribute('data-type-speed') || '55', 10);
+      const deleteSpeed = parseInt(root.getAttribute('data-delete-speed') || '30', 10);
+      const hold = parseInt(root.getAttribute('data-hold') || '1500', 10);
+
+      // --- Typing controller ---
+      const Typing = {
+        i: 0, j: 0, deleting: false, timer: null,
+        start(){
+          if (prefersReduced) { this.stop(); typed.textContent = words[0]||''; return; }
+          this.step();
+        },
+        step(){
+          const w = words[this.i] || '';
+          typed.textContent = this.deleting ? w.slice(0, this.j--) : w.slice(0, this.j++);
+          
+          if (!this.deleting && this.j === w.length + 1) { 
+            setTimeout(()=>{ 
+              this.deleting = true; 
+              this.step();
+            }, hold); 
+          } else if (this.deleting && this.j === 0) { 
+            this.deleting = false; 
+            this.i = (this.i + 1) % words.length;
+            this.timer = setTimeout(()=>this.step(), this.deleting ? deleteSpeed : typeSpeed);
+          } else {
+            this.timer = setTimeout(()=>this.step(), this.deleting ? deleteSpeed : typeSpeed);
+          }
+        },
+        stop(){ clearTimeout(this.timer); }
+      };
+
+      // Generic animator for non-typing modes
+      const Animator = {
+        i: 0, timer: null, base: 'flip',
+        setBase(mode){
+          this.base = mode === 'rotate' ? 'flip' : mode; // map rotate->flip
+          animWrap.className = `${this.base}-wrap`;
+        },
+        mount(){
+          animWrap.textContent = '';
+          const el = document.createElement('span');
+          el.className = `${this.base}-word enter`;
+          el.textContent = words[this.i] || '';
+          animWrap.appendChild(el);
+        },
+        start(){
+          if (prefersReduced) { this.stop(); animWrap.textContent = words[0]||''; return; }
+          if (!animWrap.firstChild) this.mount();
+          const animDur = this.base === 'fade' ? 380 : this.base === 'slide' ? 420 : 500; // ms
+          this.timer = setInterval(()=>{
+            const current = animWrap.firstChild;
+            if (!current) return;
+            current.classList.remove('enter');
+            current.classList.add('leave');
+            this.i = (this.i + 1) % words.length;
+            const next = document.createElement('span');
+            next.className = `${this.base}-word enter`;
+            next.textContent = words[this.i] || '';
+            animWrap.appendChild(next);
+            setTimeout(()=>{ if (current && current.parentNode) current.parentNode.removeChild(current); }, animDur - 20);
+          }, hold + animDur + 40);
+        },
+        stop(){ clearInterval(this.timer); }
+      };
+
+      // --- Mode switching ---
+      function setMode(mode){
+        console.log('Switching to mode:', mode);
+        localStorage.setItem('headlineMode', mode);
+        const isTyping = mode === 'typing';
+        typingWrap.style.display = isTyping ? 'inline' : 'none';
+        animWrap.style.display = isTyping ? 'none' : 'inline-block';
+
+        Typing.stop(); Animator.stop();
+        if (isTyping) {
+          Typing.i = 0; Typing.j = 0; Typing.deleting = false; Typing.start();
+        } else {
+          Animator.i = 0; Animator.setBase(mode); Animator.mount(); Animator.start();
+        }
+      }
+
+      effectSelect.addEventListener('change', (e)=> {
+        console.log('Effect select changed to:', e.target.value);
+        setMode(e.target.value);
+      });
+
+      // Initialize
+      const saved = localStorage.getItem('headlineMode') || 'typing';
+      effectSelect.value = saved;
+      setMode(saved);
+    });
+
+    // Footer year (outside DOMContentLoaded)
+    document.addEventListener('DOMContentLoaded', function() {
+      const yearEl = document.getElementById('year');
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
+    });
+  </script>
+</body>
+</html>
