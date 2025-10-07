@@ -153,8 +153,17 @@ $stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkou
                                 </div>
                             <?php endif ?>
                         </div>
+                        <?php $feature_video = get_sub_field('video'); ?>
                         <?php $feature_img = get_sub_field('image'); ?>
-                        <?php if ($feature_img) : ?>
+
+                        <?php if ($feature_video) : ?>
+                            <div class="feature-img">
+                                <video autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 12px;">
+                                    <source src="<?php echo esc_url($feature_video['url']); ?>" type="<?php echo esc_attr($feature_video['mime_type']); ?>">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        <?php elseif ($feature_img) : ?>
                             <div class="feature-img">
                                 <img src="<?php echo esc_url($feature_img['sizes']['2048x2048']); ?>" alt="<?php the_sub_field('title') ?>">
                             </div>
