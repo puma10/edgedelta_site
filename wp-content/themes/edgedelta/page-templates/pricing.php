@@ -53,7 +53,9 @@ get_header();
                                         <div><?php echo $product['product_name'] ?></div>
                                     </div>
                                     <div class="padding-bottom padding-small">
-                                        <h2 class="heading-style-h3">$<strong><?php echo $product['price'] ?></strong> <span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span></h2>
+                                        <h2 class="heading-style-h3">
+                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><strong><?php echo $product['price'] ?></strong> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?>
+                                        </h2>
                                     </div>
                                     <div class="padding-bottom padding-custom1">
                                         <div class="text-weight-medium text-size-medium text-color-neutral-lighter"><?php echo $product['desciption'] ?></div>
@@ -179,7 +181,9 @@ get_header();
                                         <div><?php echo $product['product_name'] ?></div>
                                     </div>
                                     <div class="padding-bottom padding-small">
-                                        <h2 class="heading-style-h3">$<?php echo $product['price'] ?> <span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span></h2>
+                                        <h2 class="heading-style-h3">
+                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><?php echo $product['price'] ?> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?>
+                                        </h2>
                                     </div>
                                     <div class="padding-bottom padding-custom1">
                                         <div class="text-weight-medium text-size-medium text-color-neutral-lighter"><?php echo $product['desciption'] ?></div>
