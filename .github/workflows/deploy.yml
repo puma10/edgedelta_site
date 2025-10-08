@@ -1,0 +1,35 @@
+name: Deploy to Kinsta
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Kinsta via rsync
+        env:
+          KINSTA_HOST: ${{ secrets.KINSTA_HOST }}
+          KINSTA_PORT: ${{ secrets.KINSTA_PORT }}
+          KINSTA_USER: ${{ secrets.KINSTA_USER }}
+          KINSTA_PASSWORD: ${{ secrets.KINSTA_PASSWORD }}
+          KINSTA_PATH: ${{ secrets.KINSTA_PATH }}
+        run: |
+          # Install sshpass for password authentication
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+          # Deploy theme files to Kinsta
+          sshpass -p "$KINSTA_PASSWORD" rsync -avz --delete \
+            -e "ssh -p $KINSTA_PORT -o StrictHostKeyChecking=no" \
+            wp-content/themes/edgedelta/ \
+            $KINSTA_USER@$KINSTA_HOST:$KINSTA_PATH/wp-content/themes/edgedelta/
+
+          echo "✅ Theme deployed successfully to Kinsta"
