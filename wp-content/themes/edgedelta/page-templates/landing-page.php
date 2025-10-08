@@ -6,6 +6,10 @@
 
 get_header('three');
 $stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkout?lookup_key=ED_MONTHLY_PRO_CREDIT_VALUE__20&cancel_url=' . urlencode(get_permalink());
+
+// Enqueue Swiper for this page
+wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css');
+wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js', array('jquery'), null, true);
 ?>
 
 
@@ -271,7 +275,13 @@ $stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkou
                                             <div class="cursor_card_icon">
                                                 <?php if ($i === 1) : ?>
                                                     <div class="cursor_visual_element frontier_visual">
-                                                        <div class="visual_triangle"></div>
+                                                        <svg width="120" height="120" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: float 3s ease-in-out infinite;">
+                                                            <!-- Sparkle/Stars AI Icon -->
+                                                            <path d="M24 8L26.5 18.5L37 21L26.5 23.5L24 34L21.5 23.5L11 21L21.5 18.5L24 8Z" fill="currentColor" opacity="0.8"/>
+                                                            <path d="M15 12L16 15L19 16L16 17L15 20L14 17L11 16L14 15L15 12Z" fill="currentColor" opacity="0.6"/>
+                                                            <path d="M33 28L34 31L37 32L34 33L33 36L32 33L29 32L32 31L33 28Z" fill="currentColor" opacity="0.6"/>
+                                                            <circle cx="24" cy="21" r="2" fill="currentColor"/>
+                                                        </svg>
                                                     </div>
                                                 <?php elseif ($i === 2) : ?>
                                                     <div class="cursor_visual_element familiar_visual">
@@ -424,7 +434,7 @@ $stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkou
 <?php get_footer(); ?>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    function initTestimonialSwiper() {
         if (typeof Swiper !== 'undefined') {
             const testimonialSwiper = new Swiper('.swiper.is-slider-main', {
                 slidesPerView: 1,
@@ -440,8 +450,17 @@ $stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkou
                 },
                 speed: 800,
             });
+        } else {
+            // Retry if Swiper not loaded yet
+            setTimeout(initTestimonialSwiper, 100);
         }
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTestimonialSwiper);
+    } else {
+        initTestimonialSwiper();
+    }
 </script>
 
 <script>
