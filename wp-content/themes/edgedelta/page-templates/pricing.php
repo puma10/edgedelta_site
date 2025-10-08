@@ -54,7 +54,7 @@ get_header();
                                     </div>
                                     <div class="padding-bottom padding-small">
                                         <h2 class="heading-style-h3">
-                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><strong><?php echo $product['price'] ?></strong> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?>
+                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><strong><?php echo $product['price'] ?></strong> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?><?php if (!empty($product['show_per_user_month'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal"> / user / month</span><?php endif ?>
                                         </h2>
                                     </div>
                                     <div class="padding-bottom padding-custom1">
@@ -182,7 +182,7 @@ get_header();
                                     </div>
                                     <div class="padding-bottom padding-small">
                                         <h2 class="heading-style-h3">
-                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><?php echo $product['price'] ?> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?>
+                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><?php echo $product['price'] ?> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?><?php if (!empty($product['show_per_user_month'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal"> / user / month</span><?php endif ?>
                                         </h2>
                                     </div>
                                     <div class="padding-bottom padding-custom1">
