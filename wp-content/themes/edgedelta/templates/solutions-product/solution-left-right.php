@@ -43,20 +43,20 @@
 
                                     <?php if (have_rows('bullets')) : ?>
                                         <div class="padding-bottom padding-large">
-                                            <div class="max-width-large align-center">
-                                                <div class="grid_bullets">
-                                                    <?php while (have_rows('bullets')) : the_row(); ?>
-                                                        <div class="grid_bullet">
-                                                            <div class="grid_bullet-header">
-                                                                <div class="icon w-embed">
-                                                                    <?php the_sub_field('svg') ?>
-                                                                </div>
-                                                                <h4 class="text-size-large text-weight-medium text-font-grotesk"><?php the_sub_field('title') ?></h4>
+                                            <div class="home_bullets">
+                                                <?php while (have_rows('bullets')) : the_row(); ?>
+                                                    <div class="home_bullet">
+                                                        <div class="icon-product_large w-embed">
+                                                            <?php the_sub_field('svg') ?>
+                                                        </div>
+                                                        <div>
+                                                            <div class="padding-bottom padding-xsmall">
+                                                                <h3 class="home-bullet-heading"><?php the_sub_field('title') ?></h3>
                                                             </div>
                                                             <div class="text-weight-medium text-color-neutral-lighter"><?php the_sub_field('deciption') ?></div>
                                                         </div>
-                                                    <?php endwhile; ?>
-                                                </div>
+                                                    </div>
+                                                <?php endwhile; ?>
                                             </div>
                                         </div>
                                     <?php endif; ?>
