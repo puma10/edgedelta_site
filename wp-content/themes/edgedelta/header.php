@@ -55,14 +55,19 @@
                         </div>
                     </div>
 
-                    <div class="navbar_button-wrapper hide-tablet">
-                        <a href="https://app.edgedelta.com/" target="_blank" class="navbar_link w-nav-link">Login</a>
-                        <a href="/request-demo" class="button is-nav w-inline-block">
-                            <div class="button-text">Get Started</div>
+                    <?php if (check_current_url_in_button_head()) : ?>
+                        <div class="navbar_button-wrapper hide-tablet">
+                            <a href="https://app.edgedelta.com/" target="_blank" class="navbar_link w-nav-link">Login</a>
+                            <a href="<?php the_field('url_btn', 'option') ?>" class="gradient-btn green-blue"><?php the_field('text_btn', 'option') ?></a>
+                        </div>
+                    <?php else : ?>
+                        <a href="<?php the_field('request_demo_url', 'option') ?>" class="button is-nav w-inline-block">
+                            <div class="button-text"><?php the_field('request_demo_text', 'option') ?></div>
                             <div class="overlay-gradient-1"></div>
                             <div class="overlay-gradient-2"></div>
                         </a>
-                    </div>
+                    <?php endif ?>
+
                 </div>
             </div>
             <div class="w-nav-overlay" data-wf-ignore="" id="w-nav-overlay-0"></div>

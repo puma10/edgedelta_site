@@ -20,10 +20,117 @@
         .admin-bar .ed-banner {
             margin-top: 32px;
         }
+
+        /* Announcement Banner */
+        .announcement-banner {
+            background: #1a3a2e;
+            color: #ffffff;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s ease, max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+            max-height: 100px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .announcement-banner:hover {
+            background: #234d3d;
+        }
+
+        .announcement-banner.scroll-hidden {
+            max-height: 0;
+            opacity: 0;
+            padding: 0 20px;
+            pointer-events: none;
+        }
+
+        .announcement-banner.hidden {
+            display: none;
+        }
+
+        .announcement-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .announcement-text {
+            font-weight: 700;
+            color: white;
+        }
+
+        .close-banner {
+            position: absolute;
+            right: 16px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: transform 0.2s;
+        }
+
+        .close-banner:hover {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 640px) {
+            .announcement-banner {
+                padding: 10px 40px 10px 16px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body <?php body_class() ?>>
+    <!-- Announcement Banner -->
+    <div id="announcement-banner" class="announcement-banner" style="display: none;">
+        <a href="<?php echo home_url('/company/blog/introducing-edge-delta-ai-teammates-collaborative-ai-for-any-workflow'); ?>" class="announcement-content" style="text-decoration: none; color: white;">
+            <span class="announcement-text"> <i>Introducing AI Teammates: Collaborative AI for SRE, Security, and DevOps Teams</i> - <u>Learn more</u></span>
+        </a>
+        <button class="close-banner" onclick="document.getElementById('announcement-banner').style.display='none'; sessionStorage.setItem('bannerDismissed', 'true');">×</button>
+    </div>
+
+    <script>
+        // Simple banner show/hide
+        (function() {
+            var banner = document.getElementById('announcement-banner');
+            if (!banner) return;
+
+            // Show banner if not dismissed
+            if (sessionStorage.getItem('bannerDismissed') !== 'true') {
+                banner.style.display = 'flex';
+            }
+
+            // Hide on scroll
+            var lastScroll = 0;
+            window.addEventListener('scroll', function() {
+                if (sessionStorage.getItem('bannerDismissed') === 'true') return;
+
+                var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (currentScroll > 50) {
+                    banner.classList.add('scroll-hidden');
+                } else {
+                    banner.classList.remove('scroll-hidden');
+                }
+                lastScroll = currentScroll;
+            });
+        })();
+    </script>
+
     <div class="page-wrapper">
         <div class="w-embed"></div>
         <!-- header -->
@@ -55,10 +162,20 @@
                         </div>
                     </div>
 
-                    <div class="navbar_button-wrapper hide-tablet">
-                        <a href="https://app.edgedelta.com/" target="_blank" class="navbar_link w-nav-link">Login</a>
-                        <button class="gradient-btn green-blue" onclick="openDemoPaywall()">Get Started</button>
-                    </div>
+                    <?php if (check_current_url_in_button_head()) : ?>
+                        <div class="navbar_button-wrapper hide-tablet">
+                            <a href="https://app.edgedelta.com/" target="_blank" class="navbar_link w-nav-link">Login</a>
+                            <!-- <button class="gradient-btn green-blue" onclick="openDemoPaywall()"><//?php the_field('text_btn', 'option') ?></button> -->
+                            <a href="<?php the_field('url_btn', 'option') ?>" class="gradient-btn green-blue"><?php the_field('text_btn', 'option') ?></a>
+                        </div>
+                    <?php else : ?>
+                        <a href="<?php the_field('request_demo_url', 'option') ?>" class="button is-nav w-inline-block">
+                            <div class="button-text"><?php the_field('request_demo_text', 'option') ?></div>
+                            <div class="overlay-gradient-1"></div>
+                            <div class="overlay-gradient-2"></div>
+                        </a>
+                    <?php endif ?>
+
                 </div>
             </div>
             <div class="w-nav-overlay" data-wf-ignore="" id="w-nav-overlay-0"></div>

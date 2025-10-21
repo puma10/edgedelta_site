@@ -5,13 +5,7 @@
  */
 
 get_header('three');
-$stripe_url = 'https://api.staging.edgedelta.com/v1/billing/subscription/checkout?lookup_key=ED_MONTHLY_PRO_CREDIT_VALUE__20&cancel_url=' . urlencode(get_permalink());
-
-// Enqueue Swiper for this page
-wp_enqueue_style('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css');
-wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js', array('jquery'), null, true);
 ?>
-
 
 <div class="section_home_hero" style="z-index: 3;">
     <div class="hero-content">
@@ -32,93 +26,17 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
                     </div>
 
                     <!-- AI Demo iframe -->
-                    <div class="img_hero text-align-center" style="padding-top: 0; margin-left: calc(50% - 50vw); width: 100vw; padding: 0 min(60px, 4vw); display: flex; flex-direction: row; justify-content: center; align-items: center; max-height: 60vh; min-height: 600px;">
-                        <iframe src="https://play.edgedelta.com/ai-demo-01K5XR92CK3RENSPPA4PRKJ52Q/ai/chat" style="border: none; background: none; flex: 0 1 auto; min-width: 0; height: 100%; aspect-ratio: 24 / 10; border-radius: 12px; zoom: 0.8;"></iframe>
+                    <div class="img_hero text-align-center">
+                        <?php
+                        $img_hero = get_field('img_hero');
+                        ?>
+                        <?php if ($img_hero) : ?>
+                            <img src="<?php echo esc_url($img_hero['url']); ?>" alt="<?php echo esc_attr($img_hero['alt']); ?>" class="hero-fallback">
+                        <?php endif; ?>
+                        <iframe class="hero-iframe" 
+                            allow="clipboard-read; clipboard-write"
+                            src="https://play.edgedelta.com/ai-demo-01K5XR92CK3RENSPPA4PRKJ52Q/ai/chat/01K6N8NBTQCH9D3BF7MRWXPFGE?thread=01K70DCPV69PBCQXDD3K5HEZXJ&message=01K70DDAENP9HAMTJW0R5CHEP9"></iframe>
                     </div>
-
-
-                    <div class="modal_wrapper" id="demo-paywall" style="display: none;">
-                        <div class="modal_bg" style="backdrop-filter: blur(2px)"></div>
-                        <div class="modal_component" style="width: 600px; min-width: 0; max-width: 90vw;">
-                            <div class="modal_close" onclick="closeDemoPaywall()">
-                                <div class="icon w-embed">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 10L10 2" stroke="currentColor" stroke-width="2.12014" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        <path d="M10 10L2 2" stroke="currentColor" stroke-width="2.12014" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <form style="display: flex; flex-direction: column; gap: 8px;" action="<?php echo esc_attr($stripe_url); ?>" method="POST" onsubmit="window?.analytics?.track?.('Demo-Paywall-Upgrade-Clicked')">
-                                <h6 style="font-size: 1.6em">Get Your AI Team Started Now</h6>
-
-                                <div id="demo-paywall-message" hidden></div>
-
-								<div>
-									The first multi-agent platform engineered to speed up your SRE, Security, and DevOps teams with AI
-								</div>
-
-
-                                <div style="background: #1d1d1d; padding: 20px; border: 1px solid #424242; border-radius: 6px; display: flex; flex-direction: column; gap: 4px;">
-                                    <h6 style="font-size: 1.5em">Professional</h6>
-
-                                    <div style="font-size: 1.2em">
-                                        $20<span style="color: #9b9b9b; font-size: 0.8em">/month</span>
-                                    </div>
-
-                                    <ul>
-										<li>Always-On 24/7 AI Teammates</li>
-										<li>Pre-Built System Prompts</li>
-										<li>Connects with All Your Favorite Tools</li>
-										<li>SRE, Security, DevOps AI Agents</li>
-										<li>Collaborative Chat Interface</li>
-										<li>Includes Telemetry Pipelines</li>
-										<li>OTEL and OCFS Formats Supported</li>
-										<li>Includes Logs, Metrics, and Traces</li>
-										<li>Data Privacy, Security, Governance</li>
-										<li>SOC2 Type-II Attestations</li>
-										<li>$20 of AI Credits Included</li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="hs_submit hs-submit">
-                                    <div class="hs-field-desc" style="display: none;"></div>
-                                    <div class="actions">
-                                        <input type="submit" class="hs-button primary large" style="min-width: 160px" value="Create Your Account">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <script>
-						(() => {
-							window.openDemoPaywall = function openDemoPaywall() {
-								modal.style.display = 'flex';
-							}
-							window.closeDemoPaywall = function openDemoPaywall() {
-								modal.style.display = 'none';
-							}
-
-							var modal = document.getElementById('demo-paywall');
-							
-							window.addEventListener('message', event => {
-								if (event.data?.type === 'edgedelta:demo-paywall:open') {
-									event.source?.postMessage({
-										type: 'edgedelta:demo-paywall:opened'
-									}, '*');
-
-									openDemoPaywall();
-								}
-
-								if (event.data?.type === 'edgedelta:demo-paywall:close') {
-									closeDemoPaywall();
-								}
-							});
-						})()
-                    </script>
-
-
 
                 </div>
             </div>
@@ -157,14 +75,14 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
                                 </div>
                             <?php endif ?>
                         </div>
+
                         <?php $feature_video = get_sub_field('video'); ?>
                         <?php $feature_img = get_sub_field('image'); ?>
 
                         <?php if ($feature_video) : ?>
                             <div class="feature-img">
-                                <video autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 12px;">
+                                <video poster="<?php echo esc_url($feature_img['sizes']['2048x2048']); ?>" muted playsinline preload="none" loop>
                                     <source src="<?php echo esc_url($feature_video['url']); ?>" type="<?php echo esc_attr($feature_video['mime_type']); ?>">
-                                    Your browser does not support the video tag.
                                 </video>
                             </div>
                         <?php elseif ($feature_img) : ?>
@@ -172,6 +90,7 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
                                 <img src="<?php echo esc_url($feature_img['sizes']['2048x2048']); ?>" alt="<?php the_sub_field('title') ?>">
                             </div>
                         <?php endif ?>
+
                     </div>
                 </div>
             </div>
@@ -277,10 +196,10 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
                                                     <div class="cursor_visual_element frontier_visual">
                                                         <svg width="120" height="120" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: float 3s ease-in-out infinite;">
                                                             <!-- Sparkle/Stars AI Icon -->
-                                                            <path d="M24 8L26.5 18.5L37 21L26.5 23.5L24 34L21.5 23.5L11 21L21.5 18.5L24 8Z" fill="currentColor" opacity="0.8"/>
-                                                            <path d="M15 12L16 15L19 16L16 17L15 20L14 17L11 16L14 15L15 12Z" fill="currentColor" opacity="0.6"/>
-                                                            <path d="M33 28L34 31L37 32L34 33L33 36L32 33L29 32L32 31L33 28Z" fill="currentColor" opacity="0.6"/>
-                                                            <circle cx="24" cy="21" r="2" fill="currentColor"/>
+                                                            <path d="M24 8L26.5 18.5L37 21L26.5 23.5L24 34L21.5 23.5L11 21L21.5 18.5L24 8Z" fill="currentColor" opacity="0.8" />
+                                                            <path d="M15 12L16 15L19 16L16 17L15 20L14 17L11 16L14 15L15 12Z" fill="currentColor" opacity="0.6" />
+                                                            <path d="M33 28L34 31L37 32L34 33L33 36L32 33L29 32L32 31L33 28Z" fill="currentColor" opacity="0.6" />
+                                                            <circle cx="24" cy="21" r="2" fill="currentColor" />
                                                         </svg>
                                                     </div>
                                                 <?php elseif ($i === 2) : ?>
@@ -429,7 +348,9 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
     <!-- CTA -->
 <?php endif ?>
 
-
+<!-- Paywall modal -->
+<?php get_template_part('templates/modal/paywall') ?>
+<!-- Paywall modal -->
 
 <?php get_footer(); ?>
 
@@ -470,6 +391,66 @@ wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle
             var script = document.createElement('script');
             script.src = '<?php echo get_template_directory_uri() ?>/assets/js/edge-delta-globe.js';
             document.body.appendChild(script);
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const videos = document.querySelectorAll('.feature-img video');
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            videos.forEach(video => {
+                video.removeAttribute('autoplay');
+                video.load();
+            });
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+
+                if (entry.isIntersecting) {
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(() => {
+                            const startPlayback = () => {
+                                video.play().catch(() => {});
+                                document.removeEventListener('click', startPlayback);
+                            };
+                            document.addEventListener('click', startPlayback);
+                        });
+                    }
+                } else {
+                    video.pause();
+                }
+            });
+        }, {
+            threshold: 0.3
+        });
+
+        videos.forEach(video => {
+            video.muted = true;
+            video.loop = true;
+            observer.observe(video);
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hero = document.querySelector('.img_hero');
+        const iframe = hero.querySelector('.hero-iframe');
+        const fallback = hero.querySelector('.hero-fallback');
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            if (fallback) fallback.style.display = 'block';
+        } else {
+            iframe.style.display = 'block';
         }
     });
 </script>

@@ -6,7 +6,17 @@
 
 get_header();
 ?>
+<style>
+    .heading-style-h1 {
+        font-size: 4.5rem;
+        font-weight: 600;
+    }
+</style>
+
 <?php $products = get_field('products') ?>
+<?php
+$stripe_url = 'https://api.edgedelta.com/v1/billing/subscription/checkout?lookup_key=ED_MONTHLY_PRO_CREDIT_VALUE__20&cancel_url=' . urlencode(get_permalink());
+?>
 
 <div class="section_pricing_hero">
     <div class="padding-global">
@@ -26,7 +36,15 @@ get_header();
                                 </div>
                             <?php endif ?>
                             <div class="button-group align-center">
-                                <?php if (get_field('btn_text')) : ?>
+                                <?php if (get_field('btn_checkout')) : ?>
+                                    <form action="<?php echo esc_attr($stripe_url); ?>" method="POST" onsubmit="window?.analytics?.track?.('Pricing-Get-Started-Clicked')">
+                                        <button type="submit" class="button w-inline-block">
+                                            <div class="button-text"><?php the_field('btn_text') ?></div>
+                                            <div class="overlay-gradient-1"></div>
+                                            <div class="overlay-gradient-2"></div>
+                                        </button>
+                                    </form>
+                                <?php elseif (get_field('btn_text')) : ?>
                                     <a href="<?php the_field('btn_url') ?>" target="_blank" class="button w-inline-block">
                                         <div class="button-text"><?php the_field('btn_text') ?></div>
                                         <div class="overlay-gradient-1"></div>
@@ -127,109 +145,111 @@ get_header();
 </div>
 
 
-<div class="section_observation_trusted is-relative">
-    <div class="padding-global">
-        <div class="container-large is-lines-horizontal">
-            <div class="padding-top padding-xhuge z-index-2">
-                <div class="max-width-large align-center text-align-center">
-                    <?php if (get_field('title_ps')) : ?>
+
+<?php if (get_field('title_ps')) : ?>
+    <div class="section_observation_trusted is-relative">
+        <div class="padding-global">
+            <div class="container-large is-lines-horizontal">
+                <div class="padding-top padding-xhuge z-index-2">
+                    <div class="max-width-large align-center text-align-center">
                         <div class="padding-bottom padding-small">
                             <h2 class="heading-style-h3"><?php the_field('title_ps') ?></h2>
                         </div>
-                    <?php endif ?>
-                    <div class="padding-bottom padding-large">
-                        <div class="max-width-medium align-center">
-                            <?php if (get_field('description_ps')) : ?>
-                                <div class="padding-bottom padding-large">
-                                    <div class="text-size-large text-weight-medium text-color-neutral-lighter"><?php the_field('description_ps') ?></div>
+                        <div class="padding-bottom padding-large">
+                            <div class="max-width-medium align-center">
+                                <?php if (get_field('description_ps')) : ?>
+                                    <div class="padding-bottom padding-large">
+                                        <div class="text-size-large text-weight-medium text-color-neutral-lighter"><?php the_field('description_ps') ?></div>
+                                    </div>
+                                <?php endif ?>
+                                <div class="button-group align-center">
+                                    <?php if (get_field('btn_text_ps')) : ?>
+                                        <a href="<?php the_field('btn_url_ps') ?>" target="_blank" class="button w-inline-block">
+                                            <div class="button-text"><?php the_field('btn_text_ps') ?></div>
+                                            <div class="overlay-gradient-1"></div>
+                                            <div class="overlay-gradient-2"></div>
+
+                                        </a>
+                                    <?php endif ?>
+                                    <?php if (get_field('btn_text_ps_two')) : ?>
+                                        <a href="<?php the_field('btn_url_ps_two') ?>" class="button is-secondary w-inline-block">
+                                            <div class="text-size-medium"><?php the_field('btn_text_ps_two') ?></div>
+
+                                        </a>
+                                    <?php endif ?>
                                 </div>
-                            <?php endif ?>
-                            <div class="button-group align-center">
-                                <?php if (get_field('btn_text_ps')) : ?>
-                                    <a href="<?php the_field('btn_url_ps') ?>" target="_blank" class="button w-inline-block">
-                                        <div class="button-text"><?php the_field('btn_text_ps') ?></div>
-                                        <div class="overlay-gradient-1"></div>
-                                        <div class="overlay-gradient-2"></div>
-
-                                    </a>
-                                <?php endif ?>
-                                <?php if (get_field('btn_text_ps_two')) : ?>
-                                    <a href="<?php the_field('btn_url_ps_two') ?>" class="button is-secondary w-inline-block">
-                                        <div class="text-size-medium"><?php the_field('btn_text_ps_two') ?></div>
-
-                                    </a>
-                                <?php endif ?>
                             </div>
                         </div>
                     </div>
-                </div>
-                <?php if ($products) : ?>
-                    <div class="pricing_blocks">
-                        <?php $i = 0 ?>
-                        <?php foreach ($products as $product) : ?>
-                            <?php if (!isset($product['display_hero_section'][0]) || $product['display_hero_section'][0] !== 'show') : ?>
-                                <?php $i++ ?>
-                                <?php if ($i == 2) {
-                                    $classCard = 'is-metrics';
-                                } elseif ($i == 3) {
-                                    $classCard = 'is-enterprise';
-                                } else {
-                                    $classCard = '';
-                                }  ?>
-                                <div class="pricing_block <?php echo $classCard ?>">
-                                    <div class="pricing_tag">
-                                        <div><?php echo $product['product_name'] ?></div>
-                                    </div>
-                                    <div class="padding-bottom padding-small">
-                                        <h2 class="heading-style-h3">
-                                            <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><?php echo $product['price'] ?> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?><?php if (!empty($product['show_per_user_month'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal"> / user / month</span><?php endif ?>
-                                        </h2>
-                                    </div>
-                                    <div class="padding-bottom padding-custom1">
-                                        <div class="text-weight-medium text-size-medium text-color-neutral-lighter"><?php echo $product['desciption'] ?></div>
-                                    </div>
-                                    <div class="pricing_divider"></div>
-                                    <?php if ($product['features']) : ?>
-                                        <div class="pricing_bullets">
-                                            <?php foreach ($product['features'] as $feature) : ?>
-                                                <div class="pricing_bullet">
-                                                    <div class="icon w-embed">
-                                                        <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <g filter="url(#filter0_i_14688_144020)">
-                                                                <rect y="0.5" width="20" height="20" rx="10" fill="white" fill-opacity="0.1"></rect>
-                                                                <rect y="0.5" width="20" height="20" rx="10" fill="#00DA63" fill-opacity="0.05"></rect>
-                                                                <rect x="0.35" y="0.85" width="19.3" height="19.3" rx="9.65" stroke="white" stroke-opacity="0.1" stroke-width="0.7"></rect>
-                                                                <path d="M13.75 7.75L8.59372 12.9063L6.24997 10.5625" stroke="white" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                            </g>
-                                                            <defs>
-                                                                <filter id="filter0_i_14688_144020" x="0" y="0.5" width="20" height="22.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                                                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                                                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
-                                                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
-                                                                    <feOffset dy="2.5"></feOffset>
-                                                                    <feGaussianBlur stdDeviation="2.5"></feGaussianBlur>
-                                                                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
-                                                                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0"></feColorMatrix>
-                                                                    <feBlend mode="normal" in2="shape" result="effect1_innerShadow_14688_144020"></feBlend>
-                                                                </filter>
-                                                            </defs>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="text-size-medium text-weight-medium text-color-alternate"><?php echo $feature['feature'] ?></div>
-                                                </div>
-                                            <?php endforeach ?>
+                    <?php if ($products) : ?>
+                        <div class="pricing_blocks">
+                            <?php $i = 0 ?>
+                            <?php foreach ($products as $product) : ?>
+                                <?php if (!isset($product['display_hero_section'][0]) || $product['display_hero_section'][0] !== 'show') : ?>
+                                    <?php $i++ ?>
+                                    <?php if ($i == 2) {
+                                        $classCard = 'is-metrics';
+                                    } elseif ($i == 3) {
+                                        $classCard = 'is-enterprise';
+                                    } else {
+                                        $classCard = '';
+                                    }  ?>
+                                    <div class="pricing_block <?php echo $classCard ?>">
+                                        <div class="pricing_tag">
+                                            <div><?php echo $product['product_name'] ?></div>
                                         </div>
-                                    <?php endif ?>
-                                </div>
-                            <?php endif ?>
-                        <?php endforeach ?>
-                    </div>
-                <?php endif ?>
+                                        <div class="padding-bottom padding-small">
+                                            <h2 class="heading-style-h3">
+                                                <?php if (!empty($product['show_dollar_sign'])) : ?>$<?php endif ?><?php echo $product['price'] ?> <?php if (!empty($product['show_per_gb'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal">per GB</span><?php endif ?><?php if (!empty($product['show_per_user_month'])) : ?><span class="text-font-sora text-size-xlarge text-weight-normal"> / user / month</span><?php endif ?>
+                                            </h2>
+                                        </div>
+                                        <div class="padding-bottom padding-custom1">
+                                            <div class="text-weight-medium text-size-medium text-color-neutral-lighter"><?php echo $product['desciption'] ?></div>
+                                        </div>
+                                        <div class="pricing_divider"></div>
+                                        <?php if ($product['features']) : ?>
+                                            <div class="pricing_bullets">
+                                                <?php foreach ($product['features'] as $feature) : ?>
+                                                    <div class="pricing_bullet">
+                                                        <div class="icon w-embed">
+                                                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <g filter="url(#filter0_i_14688_144020)">
+                                                                    <rect y="0.5" width="20" height="20" rx="10" fill="white" fill-opacity="0.1"></rect>
+                                                                    <rect y="0.5" width="20" height="20" rx="10" fill="#00DA63" fill-opacity="0.05"></rect>
+                                                                    <rect x="0.35" y="0.85" width="19.3" height="19.3" rx="9.65" stroke="white" stroke-opacity="0.1" stroke-width="0.7"></rect>
+                                                                    <path d="M13.75 7.75L8.59372 12.9063L6.24997 10.5625" stroke="white" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                                </g>
+                                                                <defs>
+                                                                    <filter id="filter0_i_14688_144020" x="0" y="0.5" width="20" height="22.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                                                        <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                                                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+                                                                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
+                                                                        <feOffset dy="2.5"></feOffset>
+                                                                        <feGaussianBlur stdDeviation="2.5"></feGaussianBlur>
+                                                                        <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
+                                                                        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0"></feColorMatrix>
+                                                                        <feBlend mode="normal" in2="shape" result="effect1_innerShadow_14688_144020"></feBlend>
+                                                                    </filter>
+                                                                </defs>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="text-size-medium text-weight-medium text-color-alternate"><?php echo $feature['feature'] ?></div>
+                                                    </div>
+                                                <?php endforeach ?>
+                                            </div>
+                                        <?php endif ?>
+                                    </div>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+                <img src="<?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper.avif" sizes="100vw" srcset="<?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-500.png 500w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-800.png 800w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-1080.png 1080w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper.avif 2880w" alt="" class="lights-green">
             </div>
-            <img src="<?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper.avif" sizes="100vw" srcset="<?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-500.png 500w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-800.png 800w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper-1080.png 1080w, <?php echo get_template_directory_uri() ?>/assets/images/LightsGreenUpper.avif 2880w" alt="" class="lights-green">
         </div>
     </div>
-</div>
+<?php endif ?>
+
 
 
 <?php if (get_field('title_cta')) : ?>
@@ -251,7 +271,15 @@ get_header();
                             </div>
                         <?php endif ?>
                         <div class="button-group align-center">
-                            <?php if (get_field('btn_text_cta')) : ?>
+                            <?php if (get_field('btn_cta_checkout')) : ?>
+                                <form action="<?php echo esc_attr($stripe_url); ?>" method="POST" onsubmit="window?.analytics?.track?.('Pricing-Get-Started-Clicked', { cta: true })">
+                                    <button type="submit" class="button w-inline-block">
+                                        <div class="button-text"><?php the_field('btn_text_cta') ?></div>
+                                        <div class="overlay-gradient-1"></div>
+                                        <div class="overlay-gradient-2"></div>
+                                    </button>
+                                </form>
+                            <?php elseif (get_field('btn_text_cta')) : ?>
                                 <a href="<?php the_field('btn_url_cta') ?>" target="_blank" class="button w-inline-block">
                                     <div class="button-text"><?php the_field('btn_text_cta') ?></div>
                                     <div class="overlay-gradient-1"></div>

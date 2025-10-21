@@ -6,6 +6,7 @@
 /xmlrpc.php
 /wp-admin/
 /wp-includes/
+/wp-content/index.php
 
 # Configuration Files
 /wp-config.php
@@ -17,6 +18,8 @@
 /wp-content/cache/
 /wp-content/backup*/
 /wp-content/ai1wm-backups/
+/wp-content/plugins/
+/wp-content/mu-plugins/
 
 # Logs
 *.log
@@ -56,6 +59,8 @@ composer.lock
 # Brand assets (usually not needed in deployment)
 /brand-assets/
 /library/
+/ai-demo/
+/ai-demo.html
 
 # Default WordPress themes (keep only custom theme)
 /wp-content/themes/twenty*/

@@ -28,7 +28,6 @@
 
                         .button {
                             transition: transform 0.3s ease, box-shadow 0.3s ease;
-                            min-width: 200px;
                             text-align: center;
                             display: inline-flex;
                             justify-content: center;

@@ -69,6 +69,32 @@
                             </div>
                         </div>
 
+                        <?php
+                        // Check if there's no content but there is a registration link
+                        $content = get_the_content();
+                        if (empty($content) && get_field('event_registration_link')) :
+                            $registration_link = get_field('event_registration_link');
+                            $is_calendly = strpos($registration_link, 'calendly.com') !== false;
+                        ?>
+                        <div class="padding-bottom padding-medium">
+                            <?php if ($is_calendly) : ?>
+                                <!-- Calendly popup button -->
+                                <a box-shadow="" data-w-id="event-register-btn" href="<?php echo esc_url($registration_link); ?>" class="button is-small w-inline-block event-calendly-popup-btn" onclick="openCalendlyPopup(event, '<?php echo esc_js($registration_link); ?>')">
+                                    <div class="text-size-medium">Schedule Meeting</div>
+                                    <div class="overlay-gradient-1"></div>
+                                    <div class="overlay-gradient-2"></div>
+                                </a>
+                            <?php else : ?>
+                                <!-- Regular external link button -->
+                                <a box-shadow="" data-w-id="event-register-btn" href="<?php echo esc_url($registration_link); ?>" target="_blank" rel="noopener noreferrer" class="button is-small w-inline-block">
+                                    <div class="text-size-medium">Register Now</div>
+                                    <div class="overlay-gradient-1"></div>
+                                    <div class="overlay-gradient-2"></div>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
                         <div class="case-study_info-grid">
                             <?php if (get_field('venue')) : ?>
                                 <div class="case-study_info-item">
@@ -718,17 +744,35 @@ if (!empty($content)) :
                             Don't miss out on this exclusive event. Secure your spot now and join us for an unforgettable experience.
                         </div>
                         <div class="padding-top padding-small">
-                            <?php if (get_field('event_registration_link')) : ?>
-                                <a box-shadow="" data-w-id="1bb820b8-c698-f3d4-5e52-c6185cdfaea5" href="<?php the_field('event_registration_link'); ?>" target="_blank" rel="noopener noreferrer" class="button is-small w-inline-block">
-                                    <div class="text-size-medium">Reserve Your Seat</div>
-                                    <div class="overlay-gradient-1"></div>
-                                    <div class="overlay-gradient-2"></div>
-                                    <div class="icon w-embed">
-                                        <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M3.25 7L5.75 9.5L9.75 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </a>
+                            <?php if (get_field('event_registration_link')) :
+                                $registration_link = get_field('event_registration_link');
+                                $is_calendly = strpos($registration_link, 'calendly.com') !== false;
+                            ?>
+                                <?php if ($is_calendly) : ?>
+                                    <!-- Calendly popup button -->
+                                    <a box-shadow="" data-w-id="1bb820b8-c698-f3d4-5e52-c6185cdfaea5" href="<?php echo esc_url($registration_link); ?>" class="button is-small w-inline-block" onclick="openCalendlyPopup(event, '<?php echo esc_js($registration_link); ?>')">
+                                        <div class="text-size-medium">Reserve Your Seat</div>
+                                        <div class="overlay-gradient-1"></div>
+                                        <div class="overlay-gradient-2"></div>
+                                        <div class="icon w-embed">
+                                            <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.25 7L5.75 9.5L9.75 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                <?php else : ?>
+                                    <!-- Regular external link button -->
+                                    <a box-shadow="" data-w-id="1bb820b8-c698-f3d4-5e52-c6185cdfaea5" href="<?php echo esc_url($registration_link); ?>" target="_blank" rel="noopener noreferrer" class="button is-small w-inline-block">
+                                        <div class="text-size-medium">Reserve Your Seat</div>
+                                        <div class="overlay-gradient-1"></div>
+                                        <div class="overlay-gradient-2"></div>
+                                        <div class="icon w-embed">
+                                            <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M3.25 7L5.75 9.5L9.75 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    </a>
+                                <?php endif; ?>
                             <?php else : ?>
                                 <a box-shadow="" data-w-id="1bb820b8-c698-f3d4-5e52-c6185cdfaea5" href="#event-registration-form" onclick="instantScroll(event, 'event-registration-form')" class="button is-small w-inline-block">
                                     <div class="text-size-medium">Reserve Your Seat</div>
@@ -765,4 +809,69 @@ if (!empty($content)) :
         </div>
     </div>
 </div>
+<?php endif; ?>
+
+<!-- Calendly popup script and styles -->
+<?php
+$registration_link = get_field('event_registration_link');
+if ($registration_link && strpos($registration_link, 'calendly.com') !== false) :
+?>
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+<script>
+    function openCalendlyPopup(event, url) {
+        event.preventDefault();
+
+        // Check if Calendly is loaded
+        if (typeof Calendly !== 'undefined') {
+            Calendly.initPopupWidget({
+                url: url
+            });
+        } else {
+            // Fallback: open in new tab if Calendly script hasn't loaded yet
+            window.open(url, '_blank');
+        }
+        return false;
+    }
+</script>
+
+<style>
+    /* Calendly popup width customization */
+    .calendly-overlay .calendly-popup {
+        width: 90% !important;
+        max-width: 1200px !important;
+        height: 90% !important;
+        max-height: 900px !important;
+        margin: auto !important;
+    }
+
+    .calendly-overlay .calendly-popup .calendly-popup-content {
+        height: 100% !important;
+        width: 100% !important;
+    }
+
+    .calendly-overlay .calendly-popup iframe {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Center the popup */
+    .calendly-overlay {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* For mobile responsiveness */
+    @media (max-width: 768px) {
+        .calendly-overlay .calendly-popup {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: none !important;
+            max-height: none !important;
+            margin: 0 !important;
+        }
+    }
+</style>
 <?php endif; ?>

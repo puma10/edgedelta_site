@@ -1,4 +1,52 @@
-<?php get_header(); ?>
+<?php get_header('three'); ?>
+
+<style>
+    .navbar_container .gradient-btn {
+        padding: 0.563rem 1.06rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: 0;
+    }
+
+    .gradient-btn {
+        display: inline-block;
+        border-radius: 8px;
+        border-color: transparent;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+        background: linear-gradient(90deg, #ff5d00, #00e546, #ff5d00);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: background-position 0.6s ease;
+    }
+
+    .gradient-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        padding: 1.6px;
+        background: linear-gradient(90deg, #ff5d00, #00e546, #ff5d00);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+        transition: background-position 0.6s ease;
+        z-index: -1;
+    }
+
+    .gradient-btn:hover,
+    .gradient-btn:hover::before {
+        background-position: 100% 0;
+    }
+
+    .gradient-btn.green-blue,
+    .gradient-btn.green-blue::before {
+        background-image: linear-gradient(90deg, #01DA63 0%, #27A1FF 100%);
+    }
+</style>
 
 <?php while (have_posts()) : the_post(); ?>
     <style>
@@ -6,6 +54,7 @@
     </style>
 
     <?php if (get_field('design')) : ?>
+
         <div class="section_observability_hero">
             <div class="padding-global">
                 <div class="container-large is-lines background-color-primary">
@@ -20,15 +69,21 @@
                                         <div class="text-size-medium text-weight-medium text-color-neutral-lighter"><?php the_field('description_head') ?></div>
                                     </div>
                                 <?php endif ?>
-                                <?php if (get_field('btn_text_head')) : ?>
-                                    <div class="button-group">
-                                        <a href="<?php the_field('btn_url_head') ?>" class="button w-inline-block">
-                                            <div class="button-text"><?php the_field('btn_text_head') ?></div>
-                                            <div class="overlay-gradient-1"></div>
-                                            <div class="overlay-gradient-2"></div>
-                                        </a>
-                                    </div>
+
+                                <?php if (get_field('paywall_modall_head') == true) : ?>
+                                    <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('btn_text_head') ?></button>
+                                <?php else : ?>
+                                    <?php if (get_field('btn_text_head')) : ?>
+                                        <div class="button-group">
+                                            <a href="<?php the_field('btn_url_head') ?>" class="button w-inline-block">
+                                                <div class="button-text"><?php the_field('btn_text_head') ?></div>
+                                                <div class="overlay-gradient-1"></div>
+                                                <div class="overlay-gradient-2"></div>
+                                            </a>
+                                        </div>
+                                    <?php endif ?>
                                 <?php endif ?>
+
                             </div>
                         </div>
 
@@ -59,7 +114,9 @@
                 </div>
             </div>
         </div>
+
     <?php else : ?>
+
         <div class="section_home_hero">
             <div class="padding-global">
                 <div class="container-large is-lines lines-vertical">
@@ -550,5 +607,10 @@
     <?php endif ?>
 
 <?php endwhile; ?>
+
+
+<!-- Paywall modal -->
+<?php get_template_part('templates/modal/paywall') ?>
+<!-- Paywall modal -->
 
 <?php get_footer(); ?>

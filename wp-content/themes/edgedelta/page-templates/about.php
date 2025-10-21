@@ -7,6 +7,13 @@
 get_header();
 ?>
 
+<style>
+    .heading-style-h1-s{
+        font-size: 4rem;
+        font-weight: 600;
+    }
+</style>
+
 <div class="section_product_hero">
     <div class="padding-global">
         <div class="container-large is-lines lines-vertical">
@@ -63,7 +70,7 @@ get_header();
                                     <div class="about_grid_bullet-icon">
                                         <?php if (get_sub_field('svg')) : ?>
                                             <div class="icon z-index-1 w-embed">
-                                                <?php the_sub_field('svg') ?>
+                                                <?php echo get_sub_field('svg') ?>
                                             </div>
                                         <?php endif ?>
                                         <img src="<?php echo get_template_directory_uri() ?>/assets/images/star-sm.avif" alt="star-sm" class="about_grid_bullet-stars">
@@ -219,7 +226,7 @@ get_header();
                         <div class="values_grid_item">
                             <?php if (get_sub_field('svg')) : ?>
                                 <div class="icon w-embed">
-                                    <?php the_sub_field('svg') ?>
+                                    <?php echo get_sub_field('svg') ?>
                                 </div>
                             <?php endif ?>
                             <div>

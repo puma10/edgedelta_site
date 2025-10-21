@@ -34,20 +34,29 @@
                         <?php endif ?>
                     </div>
                     <div fade-down-children="" class="button-group align-center">
-                        <?php if ($cta_black['free_trial_btn']) : ?>
-                            <a href="<?php echo $cta_black['free_trial_btn_url']; ?>" class="button w-inline-block">
-                                <div class="button-text"><?php echo $cta_black['free_trial_btn']; ?></div>
-                                <div class="overlay-gradient-1"></div>
-                                <div class="overlay-gradient-2"></div>
-                            </a>
+     
+                        <?php if ($cta_black['paywall_modall_cta_black'] == true) : ?>
+                            <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php echo $cta_black['free_trial_btn']; ?></button>
+                        <?php else : ?>
+
+                            <?php if ($cta_black['free_trial_btn']) : ?>
+                                <a href="<?php echo $cta_black['free_trial_btn_url']; ?>" class="button w-inline-block">
+                                    <div class="button-text"><?php echo $cta_black['free_trial_btn']; ?></div>
+                                    <div class="overlay-gradient-1"></div>
+                                    <div class="overlay-gradient-2"></div>
+                                </a>
+                            <?php endif ?>
+
+                            <?php if ($cta_black['request_demo_btn']) : ?>
+                                <a href="<?php echo $cta_black['request_demo_btn_url']; ?>" class="button w-inline-block">
+                                    <div class="button-text"><?php echo $cta_black['request_demo_btn']; ?></div>
+                                    <div class="overlay-gradient-1"></div>
+                                    <div class="overlay-gradient-2"></div>
+                                </a>
+                            <?php endif ?>
+
                         <?php endif ?>
-                        <?php if ($cta_black['request_demo_btn']) : ?>
-                            <a href="<?php echo $cta_black['request_demo_btn_url']; ?>" class="button w-inline-block">
-                                <div class="button-text"><?php echo $cta_black['request_demo_btn']; ?></div>
-                                <div class="overlay-gradient-1"></div>
-                                <div class="overlay-gradient-2"></div>
-                            </a>
-                        <?php endif ?>
+
                     </div>
                 </div>
             </div>

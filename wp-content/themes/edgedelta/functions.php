@@ -18,6 +18,7 @@ remove_filter('the_content_feed', 'wp_staticize_emoji');
 remove_filter('comment_text_rss', 'wp_staticize_emoji');
 remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
 add_filter('tiny_mce_plugins', 'disable_wp_emojis_in_tinymce');
+add_filter('acf/settings/remove_wp_meta_box', '__return_false');
 
 function disable_wp_emojis_in_tinymce($plugins)
 {
@@ -46,30 +47,31 @@ require_once(trailingslashit(get_template_directory()) . 'inc/consent-mode.php')
 // ==========================================
 
 // Disable comments completely
-function disable_comments_completely() {
+function disable_comments_completely()
+{
     // Close comments on the front-end
     add_filter('comments_open', '__return_false', 20, 2);
     add_filter('pings_open', '__return_false', 20, 2);
-    
+
     // Hide existing comments
     add_filter('comments_array', '__return_empty_array', 10, 2);
-    
+
     // Remove comments page from admin menu
-    add_action('admin_menu', function() {
+    add_action('admin_menu', function () {
         remove_menu_page('edit-comments.php');
     });
-    
+
     // Redirect any comment attempts
-    add_action('admin_init', function() {
+    add_action('admin_init', function () {
         global $pagenow;
         if ($pagenow === 'edit-comments.php') {
             wp_redirect(admin_url());
             exit;
         }
     });
-    
+
     // Remove comments from admin bar
-    add_action('wp_before_admin_bar_render', function() {
+    add_action('wp_before_admin_bar_render', function () {
         global $wp_admin_bar;
         $wp_admin_bar->remove_menu('comments');
     });
@@ -77,7 +79,8 @@ function disable_comments_completely() {
 add_action('init', 'disable_comments_completely');
 
 // Block comment spam
-function block_comment_spam() {
+function block_comment_spam()
+{
     // Block if accessing wp-comments-post.php directly
     if (basename($_SERVER['REQUEST_URI']) === 'wp-comments-post.php') {
         wp_die('Comments are disabled on this site.', 'Comments Disabled', array('response' => 403));
@@ -86,13 +89,14 @@ function block_comment_spam() {
 add_action('init', 'block_comment_spam');
 
 // Additional security measures for forms
-function add_anti_spam_security() {
+function add_anti_spam_security()
+{
     // Block bots by user agent
     $bad_user_agents = array(
         'bot', 'crawler', 'spider', 'scraper', 'harvest', 'extract',
         'curl', 'wget', 'libwww', 'python', 'perl', 'java'
     );
-    
+
     $user_agent = strtolower($_SERVER['HTTP_USER_AGENT'] ?? '');
     foreach ($bad_user_agents as $bad_agent) {
         if (strpos($user_agent, $bad_agent) !== false) {
@@ -102,35 +106,36 @@ function add_anti_spam_security() {
             }
         }
     }
-    
+
     // Block rapid submissions (rate limiting) - Only for non-logged-in users
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !is_admin() && !is_user_logged_in()) {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '';
         $rate_limit_key = 'rate_limit_' . md5($ip);
         $submissions = get_transient($rate_limit_key) ?: 0;
-        
+
         // Only rate limit obvious spam (very high number)
         if ($submissions > 50) { // Max 50 submissions per hour for non-logged users
             wp_die('Too many submissions. Please try again later.', 'Rate Limited', array('response' => 429));
         }
-        
+
         set_transient($rate_limit_key, $submissions + 1, HOUR_IN_SECONDS);
     }
 }
 add_action('init', 'add_anti_spam_security');
 
 // Remove comment-related features from WordPress
-function remove_comment_features() {
+function remove_comment_features()
+{
     // Remove comment feeds
     remove_action('wp_head', 'feed_links_extra', 3);
-    
+
     // Remove comment rewrite rules
-    add_filter('rewrite_rules_array', function($rules) {
+    add_filter('rewrite_rules_array', function ($rules) {
         unset($rules['comments/feed/(feed|rdf|rss|rss2|atom)/?$']);
         unset($rules['comments/(feed|rdf|rss|rss2|atom)/?$']);
         return $rules;
     });
-    
+
     // Remove comment support from post types
     $post_types = get_post_types();
     foreach ($post_types as $post_type) {
@@ -147,8 +152,9 @@ add_filter('xmlrpc_enabled', '__return_false');
 remove_action('wp_head', 'rsd_link');
 
 // Disable pingbacks
-function disable_pingbacks() {
-    add_filter('wp_headers', function($headers) {
+function disable_pingbacks()
+{
+    add_filter('wp_headers', function ($headers) {
         unset($headers['X-Pingback']);
         return $headers;
     });
@@ -177,7 +183,7 @@ function enqueue_script_style()
     wp_enqueue_script('jquery', 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js', array(), null, true);
     wp_enqueue_script('edge-delta', get_stylesheet_directory_uri() . '/assets/js/edge-delta.js',  array(), null, true);
 
-    if (is_page_template('page-templates/front-page.php') || is_page_template('page-templates/product.php') || is_page_template('page-templates/leading.php') || is_page_template('page-templates/ai-teammates-typing.php') || is_singular('solutions')) {
+    if (is_page_template('page-templates/front-page.php') || is_page_template('page-templates/product.php') || is_page_template('page-templates/landing-page.php') || is_page_template('page-templates/ai-teammates-typing.php') || is_singular('solutions')) {
         wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js',  array('jquery'), null, true);
     }
 
@@ -733,7 +739,8 @@ add_action('pre_get_posts', 'exclude_guides_from_blog_archive');
 
 // TEMPORARY: One-time script to update play.edgedelta.com links to HTTPS
 add_action('admin_menu', 'add_update_links_menu');
-function add_update_links_menu() {
+function add_update_links_menu()
+{
     add_menu_page(
         'Update Links',
         'Update Links',
@@ -745,10 +752,11 @@ function add_update_links_menu() {
     );
 }
 
-function update_links_page() {
+function update_links_page()
+{
     if (isset($_POST['update_links']) && check_admin_referer('update_links_action')) {
         global $wpdb;
-        
+
         // Update post content
         $wpdb->query(
             $wpdb->prepare(
@@ -760,7 +768,7 @@ function update_links_page() {
                 '%http://play.edgedelta.com%'
             )
         );
-        
+
         // Update post meta
         $wpdb->query(
             $wpdb->prepare(
@@ -772,10 +780,10 @@ function update_links_page() {
                 '%http://play.edgedelta.com%'
             )
         );
-        
+
         echo '<div class="notice notice-success"><p>Links have been updated successfully!</p></div>';
     }
-    ?>
+?>
     <div class="wrap">
         <h1>Update Links to HTTPS</h1>
         <p>This will update all instances of <code>http://play.edgedelta.com</code> to <code>https://play.edgedelta.com</code> in your database.</p>
@@ -784,7 +792,7 @@ function update_links_page() {
             <input type="submit" name="update_links" class="button button-primary" value="Update Links Now" onclick="return confirm('Are you sure you want to update all links? This cannot be undone.');">
         </form>
     </div>
-    <?php
+<?php
 }
 
 
@@ -814,7 +822,8 @@ function get_icon_type($type)
 // ==========================================
 
 // Add "Last Edited By" column to posts list
-function add_last_edited_by_column($columns) {
+function add_last_edited_by_column($columns)
+{
     // Insert the new column after the 'author' column
     $new_columns = array();
     foreach ($columns as $key => $value) {
@@ -827,11 +836,12 @@ function add_last_edited_by_column($columns) {
 }
 
 // Populate the "Last Edited By" column with data
-function populate_last_edited_by_column($column, $post_id) {
+function populate_last_edited_by_column($column, $post_id)
+{
     if ($column === 'last_edited_by') {
         // Get the last user who modified the post
         $last_user_id = get_post_meta($post_id, '_edit_last', true);
-        
+
         if ($last_user_id) {
             $user = get_userdata($last_user_id);
             if ($user) {
@@ -857,13 +867,15 @@ function populate_last_edited_by_column($column, $post_id) {
 }
 
 // Make the "Last Edited By" column sortable
-function make_last_edited_by_sortable($columns) {
+function make_last_edited_by_sortable($columns)
+{
     $columns['last_edited_by'] = 'last_edited_by';
     return $columns;
 }
 
 // Handle sorting for "Last Edited By" column
-function sort_last_edited_by_column($query) {
+function sort_last_edited_by_column($query)
+{
     if (!is_admin() || !$query->is_main_query()) {
         return;
     }
@@ -875,15 +887,16 @@ function sort_last_edited_by_column($query) {
 }
 
 // Track when a post is edited and by whom
-function track_post_editor($post_id) {
+function track_post_editor($post_id)
+{
     // Don't track for auto-saves, post revisions, or bulk edits
     if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
         return;
     }
-    
+
     // Get current user
     $current_user_id = get_current_user_id();
-    
+
     // Only track if user is logged in
     if ($current_user_id) {
         update_post_meta($post_id, '_edit_last', $current_user_id);
@@ -891,21 +904,22 @@ function track_post_editor($post_id) {
 }
 
 // Apply hooks for all post types
-function init_last_edited_by_columns() {
+function init_last_edited_by_columns()
+{
     $post_types = get_post_types(array('public' => true), 'names');
-    
+
     foreach ($post_types as $post_type) {
         // Add column
         add_filter("manage_{$post_type}_posts_columns", 'add_last_edited_by_column');
         add_action("manage_{$post_type}_posts_custom_column", 'populate_last_edited_by_column', 10, 2);
-        
+
         // Make sortable
         add_filter("manage_edit-{$post_type}_sortable_columns", 'make_last_edited_by_sortable');
     }
-    
+
     // Add sorting functionality
     add_action('pre_get_posts', 'sort_last_edited_by_column');
-    
+
     // Track edits
     add_action('save_post', 'track_post_editor');
 }
@@ -953,3 +967,117 @@ add_action('acf/init', function () {
         'show_in_rest' => 0,
     ));
 });
+
+
+
+
+
+add_filter('acf/load_field/name=page_links', function ($field) {
+
+    $field['type'] = 'select';
+    $field['multiple'] = 1;
+    $field['ui'] = 1;
+    $field['ajax'] = 0;
+    $field['choices'] = [];
+
+    // --- Pages ---
+    $pages = get_pages();
+    if (!empty($pages)) {
+        foreach ($pages as $page) {
+            $url = get_permalink($page->ID);
+
+            if ($page->post_name === 'about') {
+                $url = home_url('/company/about');
+            }
+            if ($page->post_name === 'newsletter-signup' || $page->post_name === 'newsletter') {
+                $url = home_url('/company/newsletter');
+            }
+            if ($page->post_name === 'integrations') {
+                $url = home_url('/product/integrations');
+            }
+
+            $field['choices'][$url] = $page->post_title;
+        }
+    }
+
+    // --- Categories ---
+    $categories = get_categories(['hide_empty' => false]);
+    if (!empty($categories)) {
+        foreach ($categories as $cat) {
+            $url = get_category_link($cat->term_id);
+            $field['choices']['Categories'][$url] = $cat->name;
+        }
+    }
+
+    // --- CPT ---
+    $custom_post_types = ['product', 'solutions'];
+    foreach ($custom_post_types as $cpt) {
+        $post_type_obj = get_post_type_object($cpt);
+        if ($post_type_obj && !empty($post_type_obj->has_archive)) {
+            $archive_url = get_post_type_archive_link($cpt);
+            if ($archive_url) {
+                $label = isset($post_type_obj->labels->name) ? $post_type_obj->labels->name : ucfirst($cpt);
+                $field['choices']['CPT Archives'][$archive_url] = $label . ' (Archive)';
+            }
+        }
+
+        $posts = get_posts([
+            'post_type' => $cpt,
+            'post_status' => 'publish',
+            'numberposts' => -1,
+        ]);
+
+        if (!empty($posts)) {
+            $label = isset($post_type_obj->labels->name) ? $post_type_obj->labels->name : ucfirst($cpt);
+            foreach ($posts as $p) {
+                $field['choices'][$label][get_permalink($p->ID)] = $p->post_title;
+            }
+        }
+    }
+
+    // --- Posts ---
+    $posts = get_posts([
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'numberposts' => -1,
+    ]);
+    if (!empty($posts)) {
+        foreach ($posts as $p) {
+            $field['choices']['Posts'][get_permalink($p->ID)] = $p->post_title;
+        }
+    }
+
+    return $field;
+});
+
+
+
+// Check if current URL matches any link from ACF option field 'button_head'
+
+function check_current_url_in_button_head()
+{
+    $links = get_field('page_links', 'option');
+
+    if (empty($links) || !is_array($links)) {
+        return false;
+    }
+
+    $current_url = home_url(add_query_arg([], $GLOBALS['wp']->request));
+    $current_url = rtrim($current_url, '/');
+
+    foreach ($links as $link) {
+        $link_url = is_array($link) && isset($link['url'])
+            ? rtrim($link['url'], '/')
+            : rtrim($link, '/');
+
+        if (strpos($link_url, 'company/blog') !== false && strpos($current_url, $link_url) === 0) {
+            return true;
+        }
+
+        if ($link_url === $current_url) {
+            return true;
+        }
+    }
+
+    return false;
+}

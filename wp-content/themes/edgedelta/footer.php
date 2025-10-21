@@ -141,6 +141,13 @@
  <?php endif ?>
 
  </div>
+
+
+ <!-- Paywall modal -->
+ <!-- <//?php get_template_part('templates/modal/paywall') ?> -->
+ <!-- Paywall modal -->
+
+
  <?php wp_footer() ?>
 
 

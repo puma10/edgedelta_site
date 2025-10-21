@@ -18,9 +18,8 @@
                         </div>
                     <?php endif ?>
                     <div fade-up-children="" class="button-group align-center">
-
-                        <?php if (is_page_template('page-templates/leading.php')) : ?>
-                            <a href="<?php the_field('free_trial_btn_url', 'option') ?>" class="button w-inline-block gradient-btn green-blue"><?php the_field('free_trial_btn', 'option') ?></a>
+                        <?php if (is_page_template('page-templates/landing-page.php')) : ?>
+                            <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('free_trial_btn', 'option') ?></button>
                         <?php else : ?>
                             <?php if (get_field('free_trial_btn', 'option')) : ?>
                                 <a href="<?php the_field('free_trial_btn_url', 'option') ?>" class="button w-inline-block">
