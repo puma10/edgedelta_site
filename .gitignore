@@ -11,6 +11,7 @@
 # Configuration Files
 /wp-config.php
 /.htaccess
+/wp-config-local.php
 
 # User Uploads & Cache
 /wp-content/uploads/
