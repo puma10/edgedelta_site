@@ -1,0 +1,60 @@
+{
+    "page": {
+        "section1_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Your Code Analyzer Teammate Is Ready to Go"
+        },
+        "section1_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "An out-of-the-box AI agent that automatically reviews every PR in GitHub, helping your team ship quality code without getting stuck in review purgatory."
+        },
+        "section2_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Code Reviews That Don’t Slow You Down"
+        },
+        "section2_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "The Code Analyzer Teammate is your team’s secret to cleaner code and faster merges. It connects to GitHub out-of-the-box, analyzing each pull request in depth and flagging risks, missing tests, and failing checks. Just turn it on, find your flow, and sail smoothly through every review."
+        },
+        "section3_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Out-of-the-Box Connectors for All Your AI Teammates"
+        },
+        "section3_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "New connectors added every day"
+        },
+        "section4_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Edge Delta’s Code Analyzer Teammate is one of many specialized, collaborative AI agents that are helping teams around the world do their best work."
+        },
+        "section5_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Key Features"
+        },
+        "section5_item1_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Thorough Code Reviews"
+        },
+        "section5_item1_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Analyzes diffs, comments, reviews, and build statuses, freeing up the humans to focus on innovation and ensuring issues don’t slip through the cracks."
+        },
+        "section5_item2_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Actionable Feedback"
+        },
+        "section5_item2_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Gives helpful feedback and updates in out-of-the-box channels, keeping everyone — from humans to other agents — in the loop."
+        },
+        "section5_item3_title": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Safe, Auditable Suggestions"
+        },
+        "section5_item3_content": {
+            "template": "page-templates/code-analyzer.php",
+            "default": "Operates read-only by default; any suggested reviewers, comments, or labels require human approval. Every action is logged for transparency, with minimal metadata."
+        }
+    }
+}
