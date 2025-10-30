@@ -33,7 +33,8 @@ get_header('three');
                         <?php if ($img_hero) : ?>
                             <img src="<?php echo esc_url($img_hero['url']); ?>" alt="<?php echo esc_attr($img_hero['alt']); ?>" class="hero-fallback">
                         <?php endif; ?>
-                        <iframe class="hero-iframe" 
+                        <iframe class="hero-iframe"
+                            loading="lazy"
                             allow="clipboard-read; clipboard-write"
                             src="https://play.edgedelta.com/ai-demo-01K5XR92CK3RENSPPA4PRKJ52Q/ai/chat/01K6N8NBTQCH9D3BF7MRWXPFGE?thread=01K70DCPV69PBCQXDD3K5HEZXJ&message=01K70DDAENP9HAMTJW0R5CHEP9"></iframe>
                     </div>
@@ -79,7 +80,7 @@ get_header('three');
                         <?php $feature_video = get_sub_field('video'); ?>
                         <?php $feature_img = get_sub_field('image'); ?>
 
-                        <?php if ($feature_video) : ?>
+                        <?php if ($feature_video && !wp_is_mobile()) : ?>
                             <div class="feature-img">
                                 <video poster="<?php echo esc_url($feature_img['sizes']['2048x2048']); ?>" muted playsinline preload="none" loop>
                                     <source src="<?php echo esc_url($feature_video['url']); ?>" type="<?php echo esc_attr($feature_video['mime_type']); ?>">
@@ -348,10 +349,6 @@ get_header('three');
     <!-- CTA -->
 <?php endif ?>
 
-<!-- Paywall modal -->
-<?php get_template_part('templates/modal/paywall') ?>
-<!-- Paywall modal -->
-
 <?php get_footer(); ?>
 
 <script>
@@ -443,14 +440,25 @@ get_header('three');
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const hero = document.querySelector('.img_hero');
+        if (!hero) return;
+
         const iframe = hero.querySelector('.hero-iframe');
         const fallback = hero.querySelector('.hero-fallback');
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (isMobile) {
-            if (fallback) fallback.style.display = 'block';
+            // COMPLETELY REMOVE iframe from DOM on mobile to prevent loading
+            if (iframe && iframe.parentNode) {
+                iframe.parentNode.removeChild(iframe);
+            }
+            // Ensure fallback image is visible
+            if (fallback) {
+                fallback.style.display = 'block';
+            }
         } else {
-            iframe.style.display = 'block';
+            // Desktop: show iframe, hide fallback
+            if (iframe) iframe.style.display = 'block';
+            if (fallback) fallback.style.display = 'none';
         }
     });
 </script>

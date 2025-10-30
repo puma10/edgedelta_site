@@ -287,6 +287,11 @@ a,
     padding-left: 0rem !important;
 }
 
+.button.green-blue {
+    font-size: 1.125rem;
+    padding: 0.783rem 1.28rem;
+}
+
 
 /* main */
 
@@ -907,7 +912,7 @@ a,
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-	pointer-events: none;
+    pointer-events: none;
 }
 
 .button-group.align-center.test a {

@@ -27,7 +27,7 @@
     <div class="page-wrapper">
         <div class="w-embed"></div>
         <!-- header -->
-        <div data-animation="default" class="navbar_component w-nav" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" data-collapse="medium" data-w-id="da62bf12-0ca5-3a1a-9f7d-52b3f8c5ec49" role="banner" data-duration="400" style="background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 100%); backdrop-filter: blur(10px);">
+        <div data-animation="default" class="navbar_component w-nav" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" data-collapse="medium" data-w-id="da62bf12-0ca5-3a1a-9f7d-52b3f8c5ec49" role="banner" data-duration="400" style="background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.3) 100%);">
             <div class="navbar_container">
 
                 <a href="<?php echo home_url(); ?>" aria-label="home" aria-current="page" class="navbar_logo-link w-nav-brand">
@@ -58,7 +58,11 @@
                     <?php if (check_current_url_in_button_head()) : ?>
                         <div class="navbar_button-wrapper hide-tablet">
                             <a href="https://app.edgedelta.com/" target="_blank" class="navbar_link w-nav-link">Login</a>
-                            <a href="<?php the_field('url_btn', 'option') ?>" class="gradient-btn green-blue"><?php the_field('text_btn', 'option') ?></a>
+                            <?php if (get_field('paywall_modall_head', 'option')) : ?>
+                                <button class="gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('text_btn', 'option') ?></button>
+                            <?php else : ?>
+                                <a href="<?php the_field('url_btn', 'option') ?>" class="gradient-btn green-blue"><?php the_field('text_btn', 'option') ?></a>
+                            <?php endif ?>
                         </div>
                     <?php else : ?>
                         <a href="<?php the_field('request_demo_url', 'option') ?>" class="button is-nav w-inline-block">

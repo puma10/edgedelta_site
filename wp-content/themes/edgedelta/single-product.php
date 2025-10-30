@@ -608,9 +608,4 @@
 
 <?php endwhile; ?>
 
-
-<!-- Paywall modal -->
-<?php get_template_part('templates/modal/paywall') ?>
-<!-- Paywall modal -->
-
 <?php get_footer(); ?>

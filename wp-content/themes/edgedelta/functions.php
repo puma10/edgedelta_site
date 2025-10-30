@@ -1036,16 +1036,16 @@ add_filter('acf/load_field/name=page_links', function ($field) {
     }
 
     // --- Posts ---
-    $posts = get_posts([
-        'post_type' => 'post',
-        'post_status' => 'publish',
-        'numberposts' => -1,
-    ]);
-    if (!empty($posts)) {
-        foreach ($posts as $p) {
-            $field['choices']['Posts'][get_permalink($p->ID)] = $p->post_title;
-        }
-    }
+    // $posts = get_posts([
+    //     'post_type' => 'post',
+    //     'post_status' => 'publish',
+    //     'numberposts' => -1,
+    // ]);
+    // if (!empty($posts)) {
+    //     foreach ($posts as $p) {
+    //         $field['choices']['Posts'][get_permalink($p->ID)] = $p->post_title;
+    //     }
+    // }
 
     return $field;
 });

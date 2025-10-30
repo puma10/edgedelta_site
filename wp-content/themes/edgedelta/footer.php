@@ -116,7 +116,7 @@
 
                      <div class="w-layout-grid footer5_legal-list">
                          <div class="footer_smalltext">© <?php echo date('Y'); ?> Edge Delta</div>
-                        <button onclick="openCookieSettings()" class="footer_smalltext footer_cookie-settings" style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font-family: inherit; font-size: inherit;">Cookie Settings</button>
+                         <button onclick="openCookieSettings()" class="footer_smalltext footer_cookie-settings" style="background: none; border: none; color: inherit; text-decoration: underline; cursor: pointer; padding: 0; font-family: inherit; font-size: inherit;">Cookie Settings</button>
                      </div>
 
                  </div>
@@ -142,11 +142,9 @@
 
  </div>
 
-
  <!-- Paywall modal -->
- <!-- <//?php get_template_part('templates/modal/paywall') ?> -->
+ <?php get_template_part('templates/modal/paywall') ?>
  <!-- Paywall modal -->
-
 
  <?php wp_footer() ?>
 
@@ -259,4 +257,5 @@
      </script>
  <?php endif ?>
  </body>
+
  </html>

@@ -32,9 +32,72 @@ $hasHubspotForm = !empty($hubspot_form_script);
                                 <h1 class="heading-style-h3" style="font-weight: 800;"><?php the_title() ?></h1>
                             </div>
 
-                            <?php 
-                            // Check if featured image exists
-                            if (has_post_thumbnail()) : ?>
+                            <?php if (get_field('date_of_event') || get_field('time_of_event')) : ?>
+                            <div class="padding-bottom padding-medium">
+                                <div class="events_info" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <?php if (get_field('date_of_event')) : ?>
+                                        <div class="events_info-item">
+                                            <div class="icon w-embed">
+                                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M6.66667 2.1665V4.6665" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.3333 2.1665V4.6665" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M2.91667 8.07483H17.0833" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M17.5 7.58317V14.6665C17.5 17.1665 16.25 18.8332 13.3333 18.8332H6.66667C3.75 18.8332 2.5 17.1665 2.5 14.6665V7.58317C2.5 5.08317 3.75 3.4165 6.66667 3.4165H13.3333C16.25 3.4165 17.5 5.08317 17.5 7.58317Z" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.0789 11.9165H13.0864" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.0789 14.4165H13.0864" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.99624 11.9165H10.0037" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.99624 14.4165H10.0037" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M6.91193 11.9165H6.91941" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M6.91193 14.4165H6.91941" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-size-medium text-color-green"><?php the_field('date_of_event') ?></div>
+                                        </div>
+                                    <?php endif ?>
+
+                                    <?php if (get_field('time_of_event')) : ?>
+                                        <div class="events_info-item">
+                                            <div class="icon w-embed">
+                                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.0001 18.8332C14.6025 18.8332 18.3334 15.1022 18.3334 10.4998C18.3334 5.89746 14.6025 2.1665 10.0001 2.1665C5.39771 2.1665 1.66675 5.89746 1.66675 10.4998C1.66675 15.1022 5.39771 18.8332 10.0001 18.8332Z" stroke="#99F0C1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13.0917 13.2582L10.5083 11.7499C10.0583 11.4915 9.69165 10.8415 9.69165 10.3165V6.8999" stroke="#99F0C1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text-size-medium text-color-green"><?php the_field('time_of_event') ?></div>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            </div>
+                            <?php endif ?>
+
+                            <?php
+                            // Video Host Information (similar to blog author section)
+                            $author_id = get_the_author_meta('ID');
+                            $author_name = get_the_author_meta('display_name', $author_id);
+                            $author_bio = get_the_author_meta('description', $author_id);
+                            $author_avatar = get_avatar($author_id, $size = '48', $default = '', $alt = '', $args = array('class' => 'blog_author_image'));
+                            ?>
+                            <div class="padding-bottom padding-medium">
+                                <div class="w-dyn-list">
+                                    <div role="list" class="w-dyn-items">
+                                        <div role="listitem" class="blog_author-item w-dyn-item">
+                                            <div class="blog_author_image-wrap">
+                                                <?php echo $author_avatar; ?>
+                                            </div>
+                                            <div>
+                                                <div class="text-size-medium text-weight-medium"><?php echo esc_html($author_name); ?></div>
+                                                <?php if ($author_bio) : ?>
+                                                    <div class="text-color-neutral-lighter"><?php echo esc_html($author_bio); ?></div>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <?php
+                            // Check if featured image exists and date/time fields don't exist
+                            if (has_post_thumbnail() && !get_field('date_of_event') && !get_field('time_of_event')) : ?>
                                 <div class="padding-bottom padding-medium">
                                     <div class="video-featured-image">
                                         <?php the_post_thumbnail('large', ['class' => 'video-featured-img']); ?>
@@ -72,31 +135,6 @@ $hasHubspotForm = !empty($hubspot_form_script);
                             </div>
 
                             <div class="text-size-large text-color-neutral-lighter video-description-content"><?php the_content() ?></div>
-                            
-                            <!-- Find us on section -->
-                            <div class="padding-top padding-medium">
-                                <div class="padding-bottom padding-xsmall">
-                                    <div class="text-font-sora text-size-large text-weight-semibold text-color-alternate">Find us on</div>
-                                </div>
-                                <div class="videos_find">
-                                    <a data-w-id="06bf9a34-e2e7-9729-7ce5-a97f09b28648" href="https://vimeo.com/edgedelta" target="_blank" class="button is-secondary is-small w-inline-block">
-                                        <div class="icon w-embed">
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3 0H17C18.6569 0 20 1.34315 20 3V17C20 18.6569 18.6569 20 17 20H3C1.34315 20 0 18.6569 0 17V3C0 1.34315 1.34315 0 3 0ZM10.0391 15.9375C11.3281 15.1172 15.5859 11.4844 16.3281 7.22656C17.0703 2.96875 11.25 3.86719 10.5859 7.57812C12.1484 6.64062 13.0078 7.96875 12.1875 9.41406C11.4062 10.9375 10.6641 11.875 10.2734 11.875C9.92188 11.875 9.64844 10.8984 9.21875 9.14062C9.11214 8.74085 9.02978 8.26429 8.94455 7.77115C8.65504 6.09598 8.33245 4.22946 6.91406 4.53125C5.15625 4.84375 2.85156 7.61719 2.85156 7.61719L3.35938 8.35938C3.35938 8.35938 4.53125 7.42187 4.88281 7.89062C5.09967 8.15085 5.64156 9.92791 6.16096 11.6313C6.57719 12.9962 6.97897 14.3138 7.1875 14.7656C7.61719 15.5859 8.78906 16.7578 10.0391 15.9375Z" fill="#818582"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="text-size-medium">Vimeo</div>
-                                    </a>
-                                    <a data-w-id="06bf9a34-e2e7-9729-7ce5-a97f09b2864c" href="https://www.youtube.com/@EdgeDelta" target="_blank" class="button is-secondary is-small w-inline-block">
-                                        <div class="icon w-embed">
-                                            <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M17.7868 0.954312C18.842 1.2365 19.665 2.06274 19.9504 3.11785C20.6968 6.12802 20.6481 11.8191 19.9661 14.8763C19.6839 15.9313 18.8576 16.7545 17.8026 17.0399C14.8237 17.7766 5.4817 17.6858 2.67534 17.0399C1.62021 16.7577 0.79711 15.9313 0.511768 14.8763C-0.192177 12.0072 -0.143575 5.93988 0.496091 3.13353C0.778284 2.07841 1.60453 1.25533 2.65966 0.969988C6.64188 0.139051 16.3695 0.407142 17.7868 0.954312ZM7.87171 5.32712V12.6643L14.2684 8.99574L7.87171 5.32712Z" fill="#818582"></path>
-                                            </svg>
-                                        </div>
-                                        <div class="text-size-medium">YouTube</div>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                         
                         <!-- Right section - Form always visible -->
@@ -412,6 +450,69 @@ $hasHubspotForm = !empty($hubspot_form_script);
                                 <h1 class="heading-style-h3" style="font-weight: 800;"><?php the_title() ?></h1>
                             </div>
 
+                            <?php if (get_field('date_of_event') || get_field('time_of_event')) : ?>
+                            <div class="padding-bottom padding-medium">
+                                <div class="events_info" style="display: flex; flex-direction: column; gap: 8px;">
+                                    <?php if (get_field('date_of_event')) : ?>
+                                        <div class="events_info-item">
+                                            <div class="icon w-embed">
+                                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M6.66667 2.1665V4.6665" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.3333 2.1665V4.6665" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M2.91667 8.07483H17.0833" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M17.5 7.58317V14.6665C17.5 17.1665 16.25 18.8332 13.3333 18.8332H6.66667C3.75 18.8332 2.5 17.1665 2.5 14.6665V7.58317C2.5 5.08317 3.75 3.4165 6.66667 3.4165H13.3333C16.25 3.4165 17.5 5.08317 17.5 7.58317Z" stroke="#99F0C1" stroke-width="1.25" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.0789 11.9165H13.0864" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.0789 14.4165H13.0864" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.99624 11.9165H10.0037" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.99624 14.4165H10.0037" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M6.91193 11.9165H6.91941" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M6.91193 14.4165H6.91941" stroke="#99F0C1" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="text-size-medium text-color-green"><?php the_field('date_of_event') ?></div>
+                                        </div>
+                                    <?php endif ?>
+
+                                    <?php if (get_field('time_of_event')) : ?>
+                                        <div class="events_info-item">
+                                            <div class="icon w-embed">
+                                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.0001 18.8332C14.6025 18.8332 18.3334 15.1022 18.3334 10.4998C18.3334 5.89746 14.6025 2.1665 10.0001 2.1665C5.39771 2.1665 1.66675 5.89746 1.66675 10.4998C1.66675 15.1022 5.39771 18.8332 10.0001 18.8332Z" stroke="#99F0C1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13.0917 13.2582L10.5083 11.7499C10.0583 11.4915 9.69165 10.8415 9.69165 10.3165V6.8999" stroke="#99F0C1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                            <div class="text-size-medium text-color-green"><?php the_field('time_of_event') ?></div>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            </div>
+                            <?php endif ?>
+
+                            <?php
+                            // Video Host Information (similar to blog author section)
+                            $author_id = get_the_author_meta('ID');
+                            $author_name = get_the_author_meta('display_name', $author_id);
+                            $author_bio = get_the_author_meta('description', $author_id);
+                            $author_avatar = get_avatar($author_id, $size = '48', $default = '', $alt = '', $args = array('class' => 'blog_author_image'));
+                            ?>
+                            <div class="padding-bottom padding-medium">
+                                <div class="w-dyn-list">
+                                    <div role="list" class="w-dyn-items">
+                                        <div role="listitem" class="blog_author-item w-dyn-item">
+                                            <div class="blog_author_image-wrap">
+                                                <?php echo $author_avatar; ?>
+                                            </div>
+                                            <div>
+                                                <div class="text-size-medium text-weight-medium"><?php echo esc_html($author_name); ?></div>
+                                                <?php if ($author_bio) : ?>
+                                                    <div class="text-color-neutral-lighter"><?php echo esc_html($author_bio); ?></div>
+                                                <?php endif ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="padding-bottom padding-small">
                                 <div class="text-size-large text-weight-medium"><?php echo get_the_date('M j, Y') ?></div>
                             </div>
@@ -641,4 +742,6 @@ $hasHubspotForm = !empty($hubspot_form_script);
 // Form is always visible, no need for click handlers
 </script>
 
-<?php get_template_part('templates/blog/more') ?>
+<?php if (!$hasHubspotForm) : ?>
+    <?php get_template_part('templates/blog/more') ?>
+<?php endif ?>

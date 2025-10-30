@@ -18,10 +18,11 @@
                         </div>
                     <?php endif ?>
                     <div fade-up-children="" class="button-group align-center">
-                        <?php if (is_page_template('page-templates/landing-page.php')) : ?>
-                            <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('free_trial_btn', 'option') ?></button>
-                        <?php else : ?>
-                            <?php if (get_field('free_trial_btn', 'option')) : ?>
+                        
+                        <?php if (get_field('free_trial_btn', 'option')) : ?>
+                            <?php if (get_field('paywall_modall_cta', 'option')) : ?>
+                                <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('free_trial_btn', 'option') ?></button>
+                            <?php else : ?>
                                 <a href="<?php the_field('free_trial_btn_url', 'option') ?>" class="button w-inline-block">
                                     <div class="button-text"><?php the_field('free_trial_btn', 'option') ?></div>
                                     <div class="overlay-gradient-1"></div>

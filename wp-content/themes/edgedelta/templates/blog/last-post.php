@@ -67,7 +67,7 @@ if ($query->have_posts()) :
                                     <?php 
                                     // Check if we're on the videos category page
                                     $current_cat = get_queried_object();
-                                    $button_text = ($current_cat && $current_cat->slug === 'videos') ? 'Watch Video' : 'Read more';
+                                    $button_text = ($current_cat && $current_cat->slug === 'videos') ? 'Register' : 'Read more';
                                     ?>
                                     <div class="text-size-medium"><?php echo $button_text; ?></div>
                                     <div class="icon w-embed" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -37,13 +37,18 @@ $stripe_url = 'https://api.edgedelta.com/v1/billing/subscription/checkout?lookup
                             <?php endif ?>
                             <div class="button-group align-center">
                                 <?php if (get_field('btn_checkout')) : ?>
-                                    <form action="<?php echo esc_attr($stripe_url); ?>" method="POST" onsubmit="window?.analytics?.track?.('Pricing-Get-Started-Clicked')">
-                                        <button type="submit" class="button w-inline-block">
-                                            <div class="button-text"><?php the_field('btn_text') ?></div>
-                                            <div class="overlay-gradient-1"></div>
-                                            <div class="overlay-gradient-2"></div>
-                                        </button>
-                                    </form>
+                                    <?php if (get_field('paywall_modall_head')) : ?>
+                                        <button class="button w-inline-block gradient-btn green-blue" onclick="openDemoPaywall()"><?php the_field('btn_text') ?></button>
+                                    <?php else : ?>
+                                        <form action="<?php echo esc_attr($stripe_url); ?>" method="POST" onsubmit="window?.analytics?.track?.('Pricing-Get-Started-Clicked')">
+                                            <button type="submit" class="button w-inline-block">
+                                                <div class="button-text"><?php the_field('btn_text') ?></div>
+                                                <div class="overlay-gradient-1"></div>
+                                                <div class="overlay-gradient-2"></div>
+                                            </button>
+                                        </form>
+                                    <?php endif ?>
+
                                 <?php elseif (get_field('btn_text')) : ?>
                                     <a href="<?php the_field('btn_url') ?>" target="_blank" class="button w-inline-block">
                                         <div class="button-text"><?php the_field('btn_text') ?></div>
@@ -52,6 +57,7 @@ $stripe_url = 'https://api.edgedelta.com/v1/billing/subscription/checkout?lookup
 
                                     </a>
                                 <?php endif ?>
+
                                 <?php if (get_field('btn_text_two')) : ?>
                                     <a href="<?php the_field('btn_url_two') ?>" class="button is-secondary w-inline-block">
                                         <div class="text-size-medium"><?php the_field('btn_text_two') ?></div>

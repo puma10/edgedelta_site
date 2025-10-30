@@ -1,4 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+/* ========================================
+   HERO IFRAME / IMAGE SWITCHING
+   ======================================== */
+
+/* Hide fallback image by default (desktop shows iframe) */
+.img_hero .hero-fallback {
+    display: none;
+}
+
+/* Desktop: Show iframe, hide image */
+@media (min-width: 768px) {
+    .img_hero .hero-iframe {
+        display: block;
+    }
+    .img_hero .hero-fallback {
+        display: none !important;
+    }
+}
+
+/* Mobile: Hide iframe completely (prevents loading), show image */
+@media (max-width: 767px) {
+    .img_hero .hero-iframe {
+        display: none !important;
+        content-visibility: hidden; /* Additional prevention */
+        visibility: hidden;
+    }
+
+    .img_hero .hero-fallback {
+        display: block !important;
+        width: 100%;
+        height: auto;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
 .navbar_container {
     border-right: 0;
     border-left: 0;
@@ -251,7 +288,7 @@ video {
 }
 
 .gr_violet {
-    background: #040b05;
+	background: #000000;
     position: relative;
     overflow: hidden;
 }
@@ -575,7 +612,12 @@ video {
 
 @media screen and (max-width: 767px) {
     .padding-section-hero {
-        padding-top: 5rem;
+        padding-top: 8rem; /* Increased from 5rem to prevent title going under header */
+    }
+
+    /* Adjust when banner is hidden */
+    body.banner-hidden .padding-section-hero {
+        padding-top: 6rem;
     }
     .mb-cs-4 {
         margin-bottom: 3rem;
